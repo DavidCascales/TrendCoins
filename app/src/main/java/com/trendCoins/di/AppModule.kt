@@ -4,6 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -32,7 +36,7 @@ class AppModule {
         okHttpClient: OkHttpClient
     ) : Retrofit = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl("http://localhost/tienda24/")
+        .baseUrl("http://ubuntuproyectodam.westeurope.cloudapp.azure.com:8080/trendcoins/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 }
