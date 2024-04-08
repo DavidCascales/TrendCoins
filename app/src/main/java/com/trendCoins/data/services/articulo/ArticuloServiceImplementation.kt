@@ -49,25 +49,4 @@ class ArticuloServiceImplementation @Inject constructor(
             throw ApiServicesException(mensajeError)
         }
     }
-
-    suspend fun insert(articulo: ArticuloApi) {
-        val mensajeError ="No se ha podido añadir el articulo"
-        try {
-            val response = articuloService.insert(articulo)
-            if (response.isSuccessful) {
-                Log.d(logTag, response.toString())
-                // Aquí response.body() es un objeto de tipo RespuestaApi
-                // que simplemente logeamos si no es null.
-                Log.d(logTag, response.body()?.toString() ?: "No hay respuesta")
-            } else {
-                val body = response.errorBody()?.string()
-                Log.e(logTag, "$mensajeError (código ${response.code()}): $this\n${body}")
-                throw ApiServicesException(mensajeError)
-            }
-        } catch (e: Exception) {
-            Log.e(logTag, "Error: ${e.localizedMessage}")
-            throw ApiServicesException(mensajeError)
-        }
-    }
-
 }

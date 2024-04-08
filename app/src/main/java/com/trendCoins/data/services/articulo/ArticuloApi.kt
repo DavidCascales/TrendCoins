@@ -5,7 +5,8 @@ package com.pmdm.tienda.data.services.articulo
 
 data class ArticuloApi(
     val id: Int,
-    val url: String,
+    val imagen: String,
     val descripcion: String,
-    val precio: Float)
+    val precio: Int,
+    val tipo: String)
 

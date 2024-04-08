@@ -12,10 +12,6 @@ import retrofit2.http.Path
 
 interface ArticuloService {
 
-    @POST("articulos")
-    @Headers("Accept: application/json", "Content-Type: application/json")
-    suspend fun insert(@Body articulo: ArticuloApi): Response<RespuestaApi>
-
     @GET("articulos/{id}")
     @Headers("Accept: application/json", "Content-Type: application/json")
     suspend fun get(@Path("id") id: Int): Response<ArticuloApi>
