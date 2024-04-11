@@ -1,8 +1,15 @@
 package com.trendCoins.di
 
+import android.content.Context
+import com.pmdm.tienda.data.room.articulo.ArticuloService
+import com.pmdm.tienda.data.services.cliente.ClienteService
+import com.trendCoins.data.ArticuloCarritoRepository
+import com.trendCoins.data.room.ArticuloCarrito.ArticuloCarritoDao
+import com.trendCoins.data.room.CarritoDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,4 +46,38 @@ class AppModule {
         .baseUrl("http://ubuntuproyectodam.westeurope.cloudapp.azure.com:8080/trendcoins/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+
+    @Provides
+    @Singleton
+    fun provideClienteService(
+        retrofit: Retrofit
+    ): ClienteService = retrofit.create(ClienteService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideArticuloService(
+        retrofit: Retrofit
+    ): ArticuloService = retrofit.create(ArticuloService::class.java)
+
+
+
+    @Provides
+    @Singleton
+    fun provideAgendaDatabase(
+        @ApplicationContext context: Context
+    ): CarritoDB = CarritoDB.getDatabase(context)
+
+    @Provides
+    @Singleton
+    fun provideArticuloCarritoDao(
+        db: CarritoDB
+    ): ArticuloCarritoDao = db.articulosCarrito()
+
+    @Provides
+    @Singleton
+    fun provideArticuloCarritoRepository(
+        articuloDao: ArticuloCarritoDao
+    ): ArticuloCarritoRepository =
+        ArticuloCarritoRepository(articuloDao)
 }
