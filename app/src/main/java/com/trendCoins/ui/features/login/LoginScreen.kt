@@ -17,12 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pmdm.tienda.R
 import com.pmdm.tienda.ui.composables.CircularImageFromResource
 import com.pmdm.tienda.ui.composables.TextNewAccount
 import com.pmdm.tienda.ui.features.login.components.UsuarioPassword
-import com.pmdm.tienda.ui.theme.LoginTheme
-import com.pmdm.tienda.ui.theme.Purple40
+import com.trendCoins.R
+import com.trendCoins.ui.theme.Purple40
+import com.trendCoins.ui.theme.TrendCoinsTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -130,7 +130,7 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     val loginViewModel: LoginViewModel = viewModel()
-    LoginTheme {
+    TrendCoinsTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background

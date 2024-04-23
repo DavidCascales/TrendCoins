@@ -27,18 +27,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pmdm.agenda.utilities.imagenes.Imagenes.Companion.base64ToAndroidBitmap
 import com.pmdm.tienda.ui.composables.FilterChipWithoutIcon
 import com.pmdm.tienda.ui.features.tienda.ArticuloDePedidoUiState
 import com.pmdm.tienda.ui.features.tienda.ArticuloUiState
 import com.pmdm.tienda.ui.features.tienda.TallaEvent
 import com.pmdm.tienda.ui.features.tienda.TallaUiState
 import com.pmdm.tienda.ui.features.tienda.TipoTalla
-import com.pmdm.tienda.ui.features.tienda.toArticuloDePedioUiState
 import kotlin.random.Random
 
 @Composable
@@ -103,12 +104,10 @@ fun DialogoCompra(
             )
             {
                 val contexto = LocalContext.current
-                val imageResource =
-                    contexto.resources.getIdentifier("@drawable/${articulo.url}", null, contexto.packageName)
 
                 Image(
                     modifier = Modifier.size(310.dp),
-                    painter = painterResource(id = imageResource),
+                    bitmap = base64ToAndroidBitmap(articulo.imagen).asImageBitmap(),
                     contentDescription = articulo.descripcion,
                     contentScale = ContentScale.Crop
                 )
@@ -146,7 +145,7 @@ fun DialogoCompra(
             TextButton(
                 onClick = {
                     if (tallaSeleccionadaState) {
-                        onClickAñadirCesta(articulo.toArticuloDePedioUiState())
+                        //onClickAñadirCesta(articulo.toArticuloDePedioUiState())
                         onDismissRequest()
 
                     } else
@@ -164,7 +163,7 @@ fun DialogoCompra(
 
 
 }
-
+/*
 @Preview
 @Composable
 fun dialogoCompraTest() {
@@ -173,4 +172,4 @@ fun dialogoCompraTest() {
     val articulo =
         ArticuloUiState(1, "${urlBase}imagen$1", Random.nextFloat() * (100) + 200, "", false)
     DialogoCompra(articulo = articulo, TallaUiState(tallaSeleccionada), {}, {}, {})
-}
+}*/

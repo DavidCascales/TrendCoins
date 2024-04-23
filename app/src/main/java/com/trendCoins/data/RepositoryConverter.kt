@@ -5,7 +5,6 @@ package com.trendCoins.data
 import com.pmdm.tienda.data.services.articulo.ArticuloApi
 import com.pmdm.tienda.data.services.cliente.ClienteApi
 import com.trendCoins.data.room.ArticuloCarrito.ArticuloCarritoEntity
-import com.trendCoins.data.room.ArticuloCarrito.ArticulosCarritoEntity
 import com.trendCoins.models.Articulo
 import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente

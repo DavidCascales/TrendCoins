@@ -64,7 +64,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideAgendaDatabase(
+    fun provideCarritoDatabase(
         @ApplicationContext context: Context
     ): CarritoDB = CarritoDB.getDatabase(context)
 

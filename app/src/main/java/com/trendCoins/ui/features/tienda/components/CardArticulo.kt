@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pmdm.agenda.utilities.imagenes.Imagenes.Companion.base64ToAndroidBitmap
 import com.pmdm.tienda.ui.features.tienda.ArticuloUiState
 import java.text.DecimalFormat
 
@@ -54,11 +56,11 @@ fun CardArticulo(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val imageResource =
-                contexto.resources.getIdentifier("@drawable/${articulo.url}", null, contexto.packageName)
+                contexto.resources.getIdentifier("@drawable/${articulo.imagen}", null, contexto.packageName)
 
             Image(
                 modifier = modifier,
-                painter = painterResource(id = imageResource),
+                bitmap = base64ToAndroidBitmap(articulo.imagen).asImageBitmap(),
                 contentDescription = articulo.descripcion,
                 contentScale = ContentScale.Crop
             )/*     AsyncImage(

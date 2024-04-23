@@ -31,8 +31,8 @@ class ConvertidorDeTipo {
 abstract class CarritoDB : RoomDatabase() {
     abstract fun articulosCarrito(): ArticuloCarritoDao
     companion object {
-        @Volatile
-        private var db: CarritoDB? = null
+        /*@Volatile
+        private var db: CarritoDB? = null*/
         fun getDatabase(context: Context) = Room.databaseBuilder(
             context,
             CarritoDB::class.java, "carrito"

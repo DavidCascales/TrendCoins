@@ -41,9 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.substring
-import com.pmdm.tienda.models.Cliente
-import com.pmdm.tienda.models.Direccion
-import com.pmdm.tienda.ui.theme.LoginTheme
+import com.trendCoins.models.Cliente
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -182,12 +180,12 @@ fun BarraSuperior(
     )
 }
 
-
+/*
 
 @Preview
 @Composable
 fun BarraSuperiorTest() {
-    val direccionUiState = Direccion("C\\ Las partidas", "Alicante", "03001")
+    //val direccionUiState = Direccion("C\\ Las partidas", "Alicante", "03001")
     val clienteUiState = Cliente(
         "21231234Y",
         "ana@gmail.com",
@@ -206,4 +204,4 @@ fun BarraSuperiorTest() {
             BarraSuperior("", true, 126f, false, clienteUiState, {}, {}, {}, {}, {}, {})
         }
     }
-}
+}*/

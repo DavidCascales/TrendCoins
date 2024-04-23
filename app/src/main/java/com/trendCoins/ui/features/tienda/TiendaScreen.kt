@@ -24,7 +24,7 @@ import com.pmdm.tienda.ui.features.tienda.components.BarraSuperior
 import com.trendCoins.models.Cliente
 import kotlinx.coroutines.launch
 
-/*
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TiendaScreen(
@@ -73,7 +73,7 @@ fun TiendaScreen(
                 onClickCasa = { onTiendaEvent(TiendaEvent.OnClickCasa) }
             )
         },
-        bottomBar = {
+        bottomBar = {/*
             BarraNavegacion(
                 numeroArticulos = numerArticulos,
                 onClickFavoritos = { onTiendaEvent(TiendaEvent.OnClickListarFavoritos) },
@@ -83,7 +83,7 @@ fun TiendaScreen(
                 onClickCarrito = { onTiendaEvent(TiendaEvent.OnClickCarrito) },
                 onClickPedidos = { onNavigateToPedido(clienteUiState.dni) }
             )
-        },
+        */},
     ) {
 
         Box(
@@ -123,4 +123,4 @@ fun TiendaScreen(
         }
 
     }
-}*/
+}

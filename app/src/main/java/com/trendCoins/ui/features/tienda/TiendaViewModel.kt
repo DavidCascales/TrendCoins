@@ -9,14 +9,8 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trendCoins.data.ClienteRepository
-import com.pmdm.tienda.data.PedidoRepository
 import com.trendCoins.data.ArticuloRepository
 import com.pmdm.tienda.data.services.ApiServicesException
-import com.pmdm.tienda.models.Articulo
-import com.pmdm.tienda.models.ArticuloDePedido
-import com.pmdm.tienda.models.Cliente
-import com.pmdm.tienda.models.Direccion
-import com.pmdm.tienda.models.Pedido
 import com.trendCoins.models.Articulo
 import com.trendCoins.models.Cliente
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -72,6 +66,7 @@ class TiendaViewModel @Inject constructor(
             is TallaEvent.OnClickGrande -> tallaUiState = inicializaTalla(TipoTalla.GRANDE)
 
             is TallaEvent.OnClickXGrande -> tallaUiState = inicializaTalla(TipoTalla.XGRANDE)
+            else -> {}
         }
     }
 
@@ -209,6 +204,8 @@ class TiendaViewModel @Inject constructor(
             is TiendaEvent.OnClickSalir -> {
                 clearTienda()
             }
+
+            else -> {}
         }
     }
 
@@ -232,7 +229,7 @@ class TiendaViewModel @Inject constructor(
     }
 
     suspend private fun actualizaFavoritos() {
-        clienteRepository.actualizaFavoritos(clienteState.correo, clienteState.favoritos)
+        clienteRepository.actualizaFavoritos(clienteState.correo, clienteState.deseados)
         // clienteState = clienteRepository.get(clienteState.correo)
         articulosState =
             if (mostrarFavoritoState) getArticulosFavoritos().toMutableStateList() else getArticulos()
@@ -272,7 +269,7 @@ class TiendaViewModel @Inject constructor(
     suspend private fun getCliente(login: String) = clienteRepository.getClienteCorreo(login)
 
     private fun Articulo.toArticuloUiState() =
-        ArticuloUiState(this.id, this.imagen, this.descripcion, this.precio,this.tipo, false)
+        ArticuloUiState(this.id, this.imagen, this.descripcion, this.precio, this.tipo, false)
 
     private fun iniciarNuevoPedido(): PedidoUiState {
         return PedidoUiState(
@@ -285,22 +282,20 @@ class TiendaViewModel @Inject constructor(
     }
 
     suspend fun inicializaCliente(correo: String?): Cliente {
-        if (correo == null) return Cliente("", "", "", "", Direccion("", "", ""), mutableListOf())
+        if (correo == null) return Cliente("", "", "", "","",  mutableListOf(),"","",0)
         else {
             val c = clienteRepository.getClienteCorreo(correo)
-            val d = Direccion(c.direccion?.calle, c.direccion?.ciudad, c.direccion?.codigoPostal)
-            return Cliente(c.dni, c.correo, c.nombre, c.telefono, d, c.favoritos)
+
+            return Cliente(c.correo, c.contraseña ,c.nombre, c.telefono, c.imagen,c.deseados,c.calle,c.ciudad,c.puntos)
         }
     }
 
     fun actualizaCliente(correo: String) {
         viewModelScope.launch {
             val c = clienteRepository.getClienteCorreo(correo)
-            val d =
-                Direccion(c.direccion?.calle, c.direccion?.ciudad, c.direccion?.codigoPostal)
-            clienteState = Cliente(c.dni, c.correo, c.nombre, c.telefono, d, c.favoritos)
-            pedidoUiState = pedidoUiState.copy(dniCliente = c.dni)
-            if (clienteState.favoritos.size > 0) articulosState =
+            clienteState = Cliente(c.correo, c.contraseña ,c.nombre, c.telefono, c.imagen,c.deseados,c.calle,c.ciudad,c.puntos)
+//            pedidoUiState = pedidoUiState.copy(dniCliente = c.dni)
+            if (clienteState.deseados.size > 0) articulosState =
                 articulosState.checkFavoritos().toMutableStateList()
         }
     }
@@ -321,41 +316,45 @@ class TiendaViewModel @Inject constructor(
             articulosState = getArticulos()
         }
     }
-/*
+
     private fun MutableList<ArticuloUiState>.checkFavoritos(): MutableList<ArticuloUiState> {
         var listaChecked = mutableListOf<ArticuloUiState>()
         this.forEach {
-            if (clienteState != null && clienteState?.favoritos?.contains(it.id)!!) listaChecked.add(
+            if (clienteState != null && clienteState?.deseados?.contains(it.id)!!) listaChecked.add(
                 ArticuloUiState(
-                    it.id, it.url, it.precio, it.descripcion, true
+                    it.id, it.imagen, it.descripcion, it.precio, it.tipo, true
                 )
             )
             else listaChecked.add(it)
         }
         return listaChecked
     }
-*/
+
     private fun MutableList<Articulo>.toArticulosUiState() =
         this.map { it.toArticuloUiState() }.toMutableList()
-/*
-    private fun ArticuloDePedidoUiState.toArticuloDePedido() =
-        ArticuloDePedido(this.articuloId, this.tamaño, this.cantidad)
-*/
+    /*
+        private fun ArticuloDePedidoUiState.toArticuloDePedido() =
+            ArticuloDePedido(this.articuloId, this.tamaño, this.cantidad)
+    */
+    /*
     private fun MutableList<ArticuloDePedidoUiState>.toArticuloDePedido(): MutableList<ArticuloDePedido> {
         return this.map { it.toArticuloDePedido() }.toMutableList()
     }
+    */
 
-    private fun PedidoUiState.toPedido() = Pedido(
-        this.pedidoId,
-        this.dniCliente,
-        totalCompraState,
-        this.fecha,
-        this.articulos.toArticuloDePedido()
-    )
+    /*
+        private fun PedidoUiState.toPedido() = Pedido(
+            this.pedidoId,
+            this.dniCliente,
+            totalCompraState,
+            this.fecha,
+            this.articulos.toArticuloDePedido()
+        )
+        */
 
 }
-
+/*
 fun ArticuloUiState.toArticuloDePedioUiState() =
     ArticuloDePedidoUiState(this.id, this.url, descripcion, 0, this.precio, 1)
 
-
+*/

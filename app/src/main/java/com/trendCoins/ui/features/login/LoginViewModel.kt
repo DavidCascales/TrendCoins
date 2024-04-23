@@ -5,10 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pmdm.tienda.data.UsuarioRepository
 import com.pmdm.tienda.data.services.ApiServicesException
+import com.trendCoins.data.ClienteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val usuarioRepository: UsuarioRepository, private val validadorLogin: ValidadorLogin
+    private val clienteRepository: ClienteRepository, private val validadorLogin: ValidadorLogin
 ) : ViewModel() {
 
     var usuarioUiState by mutableStateOf(LoginUiState())
@@ -58,7 +57,7 @@ class LoginViewModel @Inject constructor(
                     if (!validacionLoginUiState.hayError) {
 
                         usuarioUiState = usuarioUiState.copy(
-                            estaLogeado = logearse()
+                            //estaLogeado = logearse()
                         )
                         if (usuarioUiState.estaLogeado) {
                             delay(3000)
@@ -67,20 +66,22 @@ class LoginViewModel @Inject constructor(
                     }
                 }
             }
+
+            else -> {}
         }
     }
-
+/*
     suspend fun logearse(): Boolean {
         val usuario = usuarioUiState.toUsuario()
         try {
-            usuarioRepository.get().forEach {
-                if (usuario.login == it.login && usuario.password == it.password) return true
+            clienteRepository.get().forEach {
+                if (usuario.login == it.correo && usuario.password == it.contraseña) return true
             }
         } catch (e: ApiServicesException) {
         }
         return false
     }
-
+*/
     fun iniciaUsuario(correo: String?) {
         if (correo != null) usuarioUiState = LoginUiState(correo, "", false)
         else usuarioUiState = LoginUiState()
@@ -90,6 +91,6 @@ class LoginViewModel @Inject constructor(
     fun clearLogin() {
         usuarioUiState = LoginUiState()
     }
-
-    fun LoginUiState.toUsuario() = Usuario(this.login, this.password)
+/*
+    fun LoginUiState.toUsuario() = Usuario(this.login, this.password)*/
 }
