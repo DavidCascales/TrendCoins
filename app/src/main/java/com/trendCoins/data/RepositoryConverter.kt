@@ -33,7 +33,7 @@ fun List<ClienteApi>.toClientes(): List<Cliente> =
     this.map { it.toCliente() }
 
 fun ClienteApi.toCliente(): Cliente = Cliente(
-    this.correo,this.contraseña, this.nombre, this.telefono,this.imagen, this.deseados.aMutableListInt(),
+    this.correo,this.password, this.nombre, this.telefono,this.imagen, this.deseados.aMutableListInt(),
     this.calle,
     this.ciudad,
     this.puntos,

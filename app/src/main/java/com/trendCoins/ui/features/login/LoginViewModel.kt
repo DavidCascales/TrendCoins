@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pmdm.tienda.data.services.ApiServicesException
 import com.trendCoins.data.ClienteRepository
+import com.trendCoins.models.Cliente
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class LoginViewModel @Inject constructor(
         when (loginEvent) {
             is LoginEvent.LoginChanged -> {
                 usuarioUiState = usuarioUiState.copy(
-                    login = loginEvent.login
+                    correo = loginEvent.login
                 )
                 validacionLoginUiState = validacionLoginUiState.copy(
                     validacionLogin = validadorLogin.validadorLogin.valida(loginEvent.login)
@@ -40,7 +41,7 @@ class LoginViewModel @Inject constructor(
 
             is LoginEvent.PasswordChanged -> {
                 usuarioUiState = usuarioUiState.copy(
-                    password = loginEvent.password
+                    contraseña = loginEvent.password
                 )
                 validacionLoginUiState = validacionLoginUiState.copy(
                     validacionPassword = validadorLogin.validadorPassword.valida(loginEvent.password)
@@ -57,11 +58,11 @@ class LoginViewModel @Inject constructor(
                     if (!validacionLoginUiState.hayError) {
 
                         usuarioUiState = usuarioUiState.copy(
-                            //estaLogeado = logearse()
+                            estaLogeado = logearse()
                         )
                         if (usuarioUiState.estaLogeado) {
                             delay(3000)
-                            loginEvent.onNavigateTienda?.let { it(usuarioUiState.login) }
+                            loginEvent.onNavigateTienda?.let { it(usuarioUiState.correo) }
                         }
                     }
                 }
@@ -70,20 +71,29 @@ class LoginViewModel @Inject constructor(
             else -> {}
         }
     }
-/*
+
     suspend fun logearse(): Boolean {
         val usuario = usuarioUiState.toUsuario()
         try {
             clienteRepository.get().forEach {
-                if (usuario.login == it.correo && usuario.password == it.contraseña) return true
+                if (usuario.correo == it.correo && usuario.contraseña == it.contraseña) return true
             }
         } catch (e: ApiServicesException) {
         }
         return false
     }
-*/
+
     fun iniciaUsuario(correo: String?) {
-        if (correo != null) usuarioUiState = LoginUiState(correo, "", false)
+        if (correo != null) usuarioUiState = LoginUiState( correo = "",
+            contraseña = "",
+            nombre = "",
+            telefono = "",
+            imagen = "",
+            deseados = mutableListOf(),
+            calle = "",
+            ciudad = "",
+            puntos = 0,
+            estaLogeado = false)
         else usuarioUiState = LoginUiState()
         mostrarSnackBar = false
     }
@@ -91,6 +101,6 @@ class LoginViewModel @Inject constructor(
     fun clearLogin() {
         usuarioUiState = LoginUiState()
     }
-/*
-    fun LoginUiState.toUsuario() = Usuario(this.login, this.password)*/
+
+    fun LoginUiState.toUsuario() = Cliente(this.correo,this.contraseña,this.nombre,this.telefono,this.imagen,this.deseados,this.calle,this.ciudad,this.puntos)
 }
