@@ -55,8 +55,8 @@ fun LoginScreen(
 
 
             UsuarioPassword(modifier = Modifier.fillMaxWidth(),
-                loginState = usuarioUiState.login,
-                passwordState = usuarioUiState.password,
+                loginState = usuarioUiState.correo,
+                passwordState = usuarioUiState.contraseña,
                 validacionLogin = validacionLoginUiState.validacionLogin,
                 validacionPassword = validacionLoginUiState.validacionPassword,
                 recordarmeState = recordarmeState,
@@ -115,7 +115,7 @@ fun LoginScreen(
             var mensaje = ""
             if (validacionLoginUiState.hayError) mensaje = validacionLoginUiState.mensajeError ?: ""
             else if (usuarioUiState.estaLogeado) mensaje =
-                "Entrando a la APP con usuario ${usuarioUiState.login}"
+                "Entrando a la APP con usuario ${usuarioUiState.correo}"
             else mensaje = "Error, no existe el usuario o contraseña incorrecta"
             Snackbar(
                 modifier = Modifier.align(Alignment.BottomCenter)

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ElevatedCard
@@ -71,10 +73,13 @@ fun CardArticulo(
                  )*/
 
             Box(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    modifier = Modifier.align(Alignment.BottomStart),
-                    text = "${df.format(articulo.precio)}€",
-                )
+                Column {
+                    Text(text = "${articulo.descripcion}")
+                    Text(
+                        text = "${articulo.precio} puntos",
+                    )
+                }
+
                 Image(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -82,7 +87,7 @@ fun CardArticulo(
                             onClickFavorito(!favorito)
                         }, painter = rememberVectorPainter(
                         image = if (articulo.favorito
-                        ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                        ) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder
                     ), contentDescription = "Favorito"
                 )
             }

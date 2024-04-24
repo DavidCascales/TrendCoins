@@ -19,8 +19,8 @@ class ValidadorLogin  @Inject constructor() : Validador<LoginUiState> {
             .add(ValidadorLongitudMinimaTexto(8, "El password debe tener como mínimo 8 carácteres"))
 
     override fun valida(datos: LoginUiState): ValidacionLoginUiState {
-        val validacionLogin = validadorLogin.valida(datos.login)
-        val validacionPassword = validadorPassword.valida(datos.password)
+        val validacionLogin = validadorLogin.valida(datos.correo)
+        val validacionPassword = validadorPassword.valida(datos.contraseña)
 
         return ValidacionLoginUiState(
             validacionLogin = validacionLogin,
