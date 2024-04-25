@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Definiendo permisos para los dispositivos a los que accederá la aplicación
+    <!-- Definiendo permisos para los dispositivos a los que accederá la aplicación-->
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="true" />
     <uses-permission android:name="android.permission.CAMERA" />
-
+<!--
     <uses-feature
     android:name="android.hardware.telephony"
     android:required="true" />

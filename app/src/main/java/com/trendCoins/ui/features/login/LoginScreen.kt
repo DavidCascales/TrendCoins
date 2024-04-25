@@ -50,7 +50,7 @@ fun LoginScreen(
             modifier = Modifier.padding(20.dp)
         ) {
             CircularImageFromResource(
-                idImageResource = R.drawable.login, contentDescription = "Imagen Login"
+                idImageResource = R.drawable.loginfoto, contentDescription = "Imagen Login"
             )
 
 
@@ -85,28 +85,6 @@ fun LoginScreen(
                 color = Purple40
             )
             Text("ó")
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.facebook),
-                    contentDescription = "Facebook",
-                    alignment = Alignment.Center,
-                    modifier = Modifier.size(35.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.gmail),
-                    contentDescription = "Gmail",
-                    alignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(3.dp)
-
-                )
-            }
             TextNewAccount(onClick = {
                 onLoginEvent(LoginEvent.OnClickNewUser(onNavigateToNewUser))
             })
