@@ -4,8 +4,11 @@ import android.telephony.PhoneNumberUtils
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddRoad
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -144,49 +147,7 @@ fun TextFieldPassword(
     )
 }
 
-@Composable
-fun OutlinedTextFieldPassword(
-    modifier: Modifier = Modifier,
-    passwordState: String,
-    validacionState: Validacion,
-    onValueChange: (String) -> Unit,
-    label: String = "Clave",
-    labelShow: String = "Muestra clave",
-    labelHide: String = "Oculta clave",
-    iconoInformativo: Painter = rememberVectorPainter(image = Icons.Filled.Lock),
-) {
-    var passwordHidden by remember { mutableStateOf(true) }
-    OutlinedTextField(
-        modifier = modifier,
-        value = passwordState,
-        onValueChange = onValueChange,
-        singleLine = true,
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
-        supportingText = {
-            if (validacionState.hayError) {
-                Text(text = validacionState.mensajeError!!)
-            }
-        },
-        isError = validacionState.hayError,
-        visualTransformation =
-        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        leadingIcon = {
-            Icon(
-                painter = iconoInformativo,
-                contentDescription = label
-            )
-        },
-        trailingIcon = {
-            IconButton(onClick = { passwordHidden = !passwordHidden }) {
-                val visibilityIcon =
-                    if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val description = if (passwordHidden) labelShow else labelHide
-                Icon(imageVector = visibilityIcon, contentDescription = description)
-            }
-        }
-    )
-}
+
 
 @Composable
 fun TextFieldPhone(
@@ -223,40 +184,6 @@ fun TextFieldPhone(
     )
 }
 
-@Composable
-fun OutlinedTextFieldPhone(
-    modifier: Modifier = Modifier,
-    label: String = "Teléfono",
-    telefonoState: String,
-    validacionState: Validacion,
-    onValueChange: (String) -> Unit
-) {
-    OutlinedTextFieldWithErrorState(
-        modifier = modifier,
-        label = label,
-        textoState = telefonoState,
-        textoPista = "999999999",
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Filled.Phone,
-                contentDescription = "Teléfono"
-            )
-        },
-        validacionState = validacionState,
-        onValueChange = {
-            var text = it
-            if (!validacionState.hayError) {
-                try {
-                    text = PhoneNumberUtils.formatNumber(it, "ES")
-                } catch (e: Exception) {
-
-                }
-            }
-            onValueChange(text)
-        }
-    )
-}
 
 @Composable
 fun TextFieldEmail(
@@ -311,6 +238,168 @@ fun OutlinedTextFieldEmail(
         onValueChange = onValueChange
     )
 }
+@Composable
+fun OutlinedTextFieldPassword(
+    modifier: Modifier = Modifier,
+    passwordState: String,
+    validacionState: Validacion,
+    onValueChange: (String) -> Unit,
+    label: String = "Clave",
+    labelShow: String = "Muestra clave",
+    labelHide: String = "Oculta clave",
+    iconoInformativo: Painter = rememberVectorPainter(image = Icons.Filled.Lock),
+) {
+    var passwordHidden by remember { mutableStateOf(true) }
+    OutlinedTextField(
+        modifier = modifier,
+        value = passwordState,
+        onValueChange = onValueChange,
+        singleLine = true,
+        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        supportingText = {
+            if (validacionState.hayError) {
+                Text(text = validacionState.mensajeError!!)
+            }
+        },
+        isError = validacionState.hayError,
+        visualTransformation =
+        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        leadingIcon = {
+            Icon(
+                painter = iconoInformativo,
+                contentDescription = label
+            )
+        },
+        trailingIcon = {
+            IconButton(onClick = { passwordHidden = !passwordHidden }) {
+                val visibilityIcon =
+                    if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                val description = if (passwordHidden) labelShow else labelHide
+                Icon(imageVector = visibilityIcon, contentDescription = description)
+            }
+        }
+    )
+}
 
+@Composable
+fun OutlinedTextFieldPhone(
+    modifier: Modifier = Modifier,
+    label: String = "Teléfono",
+    telefonoState: String,
+    validacionState: Validacion,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        textoState = telefonoState,
+        textoPista = "999999999",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Phone,
+                contentDescription = "Teléfono"
+            )
+        },
+        validacionState = validacionState,
+        onValueChange = {
+            var text = it
+            if (!validacionState.hayError) {
+                try {
+                    text = PhoneNumberUtils.formatNumber(it, "ES")
+                } catch (e: Exception) {
 
+                }
+            }
+            onValueChange(text)
+        }
+    )
+}
+@Composable
+fun OutlinedTextFieldName(
+    modifier: Modifier = Modifier,
+    label: String = "Nombre",
+    nombreState: String,
+    validacionState: Validacion,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        textoState = nombreState,
+        textoPista = "Paco Pérez",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Person,
+                contentDescription = "Nombre"
+            )
+        },
+        validacionState = validacionState,
+        onValueChange = {
+            var text = it
+            if (!validacionState.hayError) {
+                try {
+                    text = PhoneNumberUtils.formatNumber(it, "ES")
+                } catch (e: Exception) {
 
+                }
+            }
+            onValueChange(text)
+        }
+    )
+}
+
+@Composable
+fun OutlinedTextFieldCalle(
+    modifier: Modifier = Modifier,
+    enabled: Boolean=true,
+    label: String = "Calle",
+    calleState: String,
+    validacionState: Validacion,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        enabled=enabled,
+        textoState = calleState,
+        textoPista = "C/ Ejemplo",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.AddRoad,
+                contentDescription = "Calle"
+            )
+        },
+        validacionState = validacionState,
+        onValueChange = onValueChange
+    )
+}
+@Composable
+fun OutlinedTextFieldCiudad(
+    modifier: Modifier = Modifier,
+    enabled: Boolean=true,
+    label: String = "Ciudad",
+    ciudadState: String,
+    validacionState: Validacion,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        enabled=enabled,
+        textoState = ciudadState,
+        textoPista = "Alicante",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.LocationCity,
+                contentDescription = "Ciudad"
+            )
+        },
+        validacionState = validacionState,
+        onValueChange = onValueChange
+    )
+}

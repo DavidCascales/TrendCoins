@@ -8,4 +8,6 @@ data class NewUserUiState(
     val datosPersonalesUiState: DatosPersonalesUiState = DatosPersonalesUiState(),
     val direccionUiState: DireccionUiState = DireccionUiState(),
     val newUserPasswordUiState: LoginPasswordUiState = LoginPasswordUiState(),
+
+
 )

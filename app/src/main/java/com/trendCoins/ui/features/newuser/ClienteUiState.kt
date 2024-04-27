@@ -11,9 +11,14 @@ data class DireccionClienteUiState(
 }
 data class ClienteUiState (
 
-    val dni: String,
-    val correo: String,
-    val nombre: String,
-    val telefono: String,
-    val direccion: DireccionClienteUiState?,
+
+    val correo: String ,
+    val contraseña: String ,
+    val nombre: String ,
+    val telefono: String ,
+    val imagen: String,
+    val deseados: MutableList<Int> ,
+    val calle: String?,
+    val ciudad: String? ,
+    val puntos: Int
     )

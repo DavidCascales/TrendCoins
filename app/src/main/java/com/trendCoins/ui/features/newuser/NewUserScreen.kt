@@ -24,6 +24,21 @@ import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
 import kotlinx.coroutines.launch
 
 
+fun NewUserScreenBuena(
+    newUserUiState: NewUserUiState,
+    validacionNewUserUiState: ValidacionNewUserUiState,
+    esNuevoClienteState:Boolean,
+    mostrarSnack: Boolean,
+    mensaje: String,
+    incrementaPagina: Int,
+    onDireccionEvent: (DireccionEvent) -> Unit,
+    onDatosPersonalesEvent: (DatosPersonalesEvent) -> Unit,
+    onNewUserPasswordEvent: (NewUserPasswordEvent) -> Unit,
+    onNavigateToLogin: ((correo: String, navOptions: NavOptions?) -> Unit)?
+)
+{
+
+}
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewUserScreen(

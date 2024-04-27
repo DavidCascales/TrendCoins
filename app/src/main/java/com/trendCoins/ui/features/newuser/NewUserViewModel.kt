@@ -3,16 +3,12 @@ package com.pmdm.tienda.ui.features.newuser
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
-import com.pmdm.tienda.data.ClienteRepository
-import com.pmdm.tienda.data.UsuarioRepository
 import com.pmdm.tienda.data.services.ApiServicesException
-import com.pmdm.tienda.models.Cliente
-import com.pmdm.tienda.models.Direccion
-import com.pmdm.tienda.models.Usuario
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesEvent
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesUiState
 import com.pmdm.tienda.ui.features.newuser.datospersonales.ValidadorDatosPersonales
@@ -23,6 +19,9 @@ import com.pmdm.tienda.ui.features.newuser.newuserpassword.LoginPasswordUiState
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.ValidadorLoginPassword
 import com.pmdm.tienda.ui.navigation.HomeRoute
+import com.trendCoins.data.ClienteRepository
+import com.trendCoins.models.Cliente
+import com.trendCoins.ui.features.newuser.NewUserEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,6 +44,23 @@ class NewUserViewModel @Inject constructor(
     var newUserUiState by mutableStateOf(NewUserUiState())
     var validacionNewUserUiState by mutableStateOf(ValidacionNewUserUiState())
 
+    fun onFotoCambiada(image: ImageBitmap)
+    {
+        /*hacer lo del copy*/
+    }
+    fun onNewUserEvent(event:NewUserEvent)
+    {
+        when (event)
+        {
+            is NewUserEvent.LoginChanged ->{}
+            is NewUserEvent.CalleChanged -> TODO()
+            is NewUserEvent.CiudadChanged -> TODO()
+            is NewUserEvent.NombreChanged -> TODO()
+            is NewUserEvent.PasswordChanged -> TODO()
+            is NewUserEvent.TelefonoChanged -> TODO()
+            is NewUserEvent.onClickCrearCliente -> TODO()
+        }
+    }
     fun onDatosPersonalesEvent(event: DatosPersonalesEvent) {
 
         when (event) {

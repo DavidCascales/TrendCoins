@@ -12,10 +12,10 @@ import com.pmdm.tienda.ui.composables.CircularImageFromResource
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldEmail
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldPassword
 import com.pmdm.tienda.ui.composables.TextWithLine
-import com.pmdm.tienda.R
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.LoginPasswordUiState
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.ValidacionLoginPasswordUiState
+import com.trendCoins.R
 
 
 @Composable
@@ -40,7 +40,7 @@ fun NuevoUsuarioPassword(
 
         {
             CircularImageFromResource(
-                idImageResource = R.drawable.logearse,
+                idImageResource = R.drawable.loginfoto,
                 contentDescription = "Logearse"
             )
             Spacer(modifier = Modifier.height(20.dp))
