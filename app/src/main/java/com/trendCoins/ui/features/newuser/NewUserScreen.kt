@@ -1,43 +1,88 @@
 package com.pmdm.tienda.ui.features.newuser
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavOptions
+import com.pmdm.agenda.utilities.imagenes.Imagenes
+import com.pmdm.tienda.ui.composables.OutlinedTextFieldCalle
+import com.pmdm.tienda.ui.composables.OutlinedTextFieldCiudad
+import com.pmdm.tienda.ui.composables.OutlinedTextFieldName
+import com.pmdm.tienda.ui.composables.OutlinedTextFieldPhone
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonales
 import com.pmdm.tienda.ui.features.newuser.direccion.Direccion
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.NuevoUsuarioPassword
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesEvent
 import com.pmdm.tienda.ui.features.newuser.direccion.DireccionEvent
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
+import com.trendCoins.utilities.RegistroSelectorDeImagenesConGetContent
 import kotlinx.coroutines.launch
 
 
+@Composable
 fun NewUserScreenBuena(
     newUserUiState: NewUserUiState,
     validacionNewUserUiState: ValidacionNewUserUiState,
     esNuevoClienteState:Boolean,
     mostrarSnack: Boolean,
     mensaje: String,
-    incrementaPagina: Int,
     onDireccionEvent: (DireccionEvent) -> Unit,
     onDatosPersonalesEvent: (DatosPersonalesEvent) -> Unit,
     onNewUserPasswordEvent: (NewUserPasswordEvent) -> Unit,
-    onNavigateToLogin: ((correo: String, navOptions: NavOptions?) -> Unit)?
+    onNavigateToLogin: ((correo: String, navOptions: NavOptions?) -> Unit)?,
+    onFotoCambiada :(ImageBitmap)->Unit
 )
 {
+    val selectorDeImagenes=RegistroSelectorDeImagenesConGetContent(onFotoCambiada)
+    Column {
+        Image(modifier=Modifier.size(400.dp).clickable{
+                selectorDeImagenes.launch("image/*")
+            },painter = if (newUserUiState.imagen ==null) rememberVectorPainter(image = Icons.Filled.ReportProblem) else
+            BitmapPainter(Imagenes.base64ToBitmap(newUserUiState.imagen!!)),
+            contentDescription = newUserUiState.nombre,
+            contentScale = ContentScale.Crop)
 
+        Spacer(modifier = Modifier.padding(10.dp) )
+        OutlinedTextFieldName(nombreState = , validacionState = , onValueChange = )
+        Spacer(modifier = Modifier.padding(5.dp) )
+        OutlinedTextFieldPhone(telefonoState = , validacionState = , onValueChange = )
+        Spacer(modifier = Modifier.padding(5.dp) )
+        OutlinedTextFieldCalle(calleState = , validacionState = , onValueChange = )
+        Spacer(modifier = Modifier.padding(5.dp) )
+        OutlinedTextFieldCiudad(ciudadState = , validacionState = , onValueChange = )
+        /*boton*/
+
+        if (mostrarSnack) {
+            if (mensaje.isNotEmpty()) Snackbar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(CenterHorizontally)
+            ) {
+                Text(text = mensaje)
+            }
+        }
+
+    }
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

@@ -1,5 +1,5 @@
 package com.pmdm.tienda.ui.features.newuser
-
+/*
 data class DireccionClienteUiState(
     val calle: String?,
     val ciudad: String?,
@@ -22,3 +22,4 @@ data class ClienteUiState (
     val ciudad: String? ,
     val puntos: Int
     )
+*/

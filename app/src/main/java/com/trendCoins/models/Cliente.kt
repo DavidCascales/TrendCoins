@@ -5,9 +5,9 @@ data class Cliente(
     val contraseña: String = "",
     val nombre: String = "",
     val telefono: String = "",
-    val imagen: String = "",
+    val imagen: String? = "",
     val deseados: MutableList<Int> = mutableListOf(),
-    val calle: String? = "",
-    val ciudad: String? = "",
+    val calle: String = "",
+    val ciudad: String = "",
     val puntos: Int = 0
 )

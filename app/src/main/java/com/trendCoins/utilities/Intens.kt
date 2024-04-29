@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.pmdm.agenda.utilities.imagenes.Imagenes
 
 @Composable
-fun registroSelectorDeImagenesConGetContent(
+fun RegistroSelectorDeImagenesConGetContent(
     onFotoCambiada: (ImageBitmap) -> Unit
 ): ManagedActivityResultLauncher<String, Uri?> {
     val context = LocalContext.current

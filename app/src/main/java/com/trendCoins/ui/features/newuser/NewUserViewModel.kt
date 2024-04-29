@@ -4,10 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
+import com.pmdm.agenda.utilities.imagenes.Imagenes
 import com.pmdm.tienda.data.services.ApiServicesException
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesEvent
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesUiState
@@ -30,9 +32,6 @@ import javax.inject.Inject
 class NewUserViewModel @Inject constructor(
     private val clienteRepository: ClienteRepository,
     private val usuarioRepository: UsuarioRepository,
-    private val validadorDatosPersonales: ValidadorDatosPersonales,
-    private val validadorDireccion: ValidadorDireccion,
-    private val validadorNewUserPassword: ValidadorLoginPassword,
     private val validadorNewUser: ValidadorNewUser
 ) : ViewModel() {
     var esNuevoCliente by mutableStateOf(true)
@@ -44,23 +43,105 @@ class NewUserViewModel @Inject constructor(
     var newUserUiState by mutableStateOf(NewUserUiState())
     var validacionNewUserUiState by mutableStateOf(ValidacionNewUserUiState())
 
-    fun onFotoCambiada(image: ImageBitmap)
-    {
+    fun onFotoCambiada(image: ImageBitmap) {
         /*hacer lo del copy*/
+        newUserUiState =
+            newUserUiState.copy(imagen = Imagenes.androidBitmapToBase64(image.asAndroidBitmap()))
     }
-    fun onNewUserEvent(event:NewUserEvent)
-    {
-        when (event)
-        {
-            is NewUserEvent.LoginChanged ->{}
-            is NewUserEvent.CalleChanged -> TODO()
-            is NewUserEvent.CiudadChanged -> TODO()
-            is NewUserEvent.NombreChanged -> TODO()
-            is NewUserEvent.PasswordChanged -> TODO()
-            is NewUserEvent.TelefonoChanged -> TODO()
+
+    fun onNewUserEvent(event: NewUserEvent) {
+        when (event) {
+            is NewUserEvent.LoginChanged -> {
+                mostrarSnackState = false
+                mensajeSnackBarState = ""
+                newUserUiState = newUserUiState.copy(
+
+                    correo = event.login
+
+                )
+                validacionNewUserUiState = validacionNewUserUiState.copy(
+
+                    validacionLogin = validadorNewUser.validacionLogin.valida(event.login)
+
+                )
+
+            }
+
+            is NewUserEvent.CalleChanged -> {
+                mostrarSnackState = false
+                mensajeSnackBarState = ""
+                newUserUiState = newUserUiState.copy(
+
+                    calle = event.calle
+
+                )
+                validacionNewUserUiState = validacionNewUserUiState.copy(
+
+                    validacionCalle = validadorNewUser.validadorCalle.valida(event.calle)
+
+                )
+            }
+
+            is NewUserEvent.CiudadChanged -> {
+                mostrarSnackState = false
+                mensajeSnackBarState = ""
+                newUserUiState = newUserUiState.copy(
+
+                    ciudad = event.ciudad,
+
+                    )
+                validacionNewUserUiState = validacionNewUserUiState.copy(
+
+                    validacionCiudad = validadorNewUser.validadorCiudad.valida(event.ciudad)
+
+                )
+            }
+
+            is NewUserEvent.NombreChanged -> {
+                mostrarSnackState = false
+                mensajeSnackBarState = ""
+                newUserUiState = newUserUiState.copy(
+                    nombre = event.nombre
+                )
+                validacionNewUserUiState = validacionNewUserUiState.copy(
+                    validacionNombre = validadorNewUser.validadorNombre.valida(event.nombre)
+
+                )
+            }
+
+            is NewUserEvent.PasswordChanged -> {
+                mostrarSnackState = false
+                mensajeSnackBarState = ""
+                newUserUiState = newUserUiState.copy(
+
+                    contraseña = event.password,
+
+                    )
+                validacionNewUserUiState = validacionNewUserUiState.copy(
+
+                    validacionPassword = validadorNewUser.validacionPassword.valida(event.password)
+                )
+            }
+
+            is NewUserEvent.TelefonoChanged -> {
+                mostrarSnackState = false
+                mensajeSnackBarState = ""
+                newUserUiState = newUserUiState.copy(
+
+                    telefono = event.telefono
+
+                )
+                validacionNewUserUiState = validacionNewUserUiState.copy(
+
+                    validacionTelefono = validadorNewUser.validadorTelefono.valida(event.telefono)
+
+                )
+            }
+
             is NewUserEvent.onClickCrearCliente -> TODO()
         }
     }
+
     fun onDatosPersonalesEvent(event: DatosPersonalesEvent) {
 
         when (event) {
@@ -261,11 +342,10 @@ class NewUserViewModel @Inject constructor(
     suspend private fun creaCuenta() {
 
         estaCreadaCuenta = false
-        var clientes= mutableListOf<Cliente>()
+        var clientes = mutableListOf<Cliente>()
         try {
             clientes = clienteRepository.get().toMutableList()
-        }catch (e:ApiServicesException)
-        {
+        } catch (e: ApiServicesException) {
 
         }
 
