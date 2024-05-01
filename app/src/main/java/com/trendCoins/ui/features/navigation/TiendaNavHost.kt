@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.pmdm.tienda.ui.features.login.LoginViewModel
 import com.pmdm.tienda.ui.features.newuser.NewUserViewModel
-import com.pmdm.tienda.ui.features.pedidos.PedidosViewModel
 import com.pmdm.tienda.ui.features.tienda.TiendaViewModel
 import com.pmdm.tienda.ui.navigation.HomeRoute
 
@@ -27,7 +26,7 @@ fun TiendaNavHost() {
     val newUserViewModel: NewUserViewModel = hiltViewModel()
     val loginViewModel: LoginViewModel = hiltViewModel()
     val tiendaViewModel: TiendaViewModel = hiltViewModel()
-    val pedidosViewModel: PedidosViewModel = hiltViewModel()
+    //val pedidosViewModel: PedidosViewModel = hiltViewModel()
     NavHost(
         navController = navController,
         startDestination = HomeRoute
@@ -69,6 +68,6 @@ fun TiendaNavHost() {
             },
 
         )
-        pedidosScreenRoute(pedidosViewModel=pedidosViewModel)
+        //pedidosScreenRoute(pedidosViewModel=pedidosViewModel)
     }
 }

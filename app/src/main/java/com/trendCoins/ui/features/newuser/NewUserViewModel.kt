@@ -25,19 +25,21 @@ import com.trendCoins.data.ClienteRepository
 import com.trendCoins.models.Cliente
 import com.trendCoins.ui.features.newuser.NewUserEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NewUserViewModel @Inject constructor(
     private val clienteRepository: ClienteRepository,
-    private val usuarioRepository: UsuarioRepository,
+    //private val usuarioRepository: UsuarioRepository,
     private val validadorNewUser: ValidadorNewUser
 ) : ViewModel() {
     var esNuevoCliente by mutableStateOf(true)
     var mostrarSnackState by mutableStateOf(false)
     var mensajeSnackBarState by mutableStateOf("")
-    var incrementaPaginaState by mutableStateOf(0)
+
+    //var incrementaPaginaState by mutableStateOf(0)
     var estaCreadaCuenta: Boolean = false
 
     var newUserUiState by mutableStateOf(NewUserUiState())
@@ -138,76 +140,102 @@ class NewUserViewModel @Inject constructor(
                 )
             }
 
-            is NewUserEvent.onClickCrearCliente -> TODO()
-        }
-    }
-
-    fun onDatosPersonalesEvent(event: DatosPersonalesEvent) {
-
-        when (event) {
-            is DatosPersonalesEvent.NombreChanged -> {
-                mostrarSnackState = false
-                mensajeSnackBarState = ""
-                newUserUiState = newUserUiState.copy(
-                    datosPersonalesUiState = newUserUiState.datosPersonalesUiState.copy(nombre = event.nombre)
-                )
-                validacionNewUserUiState = validacionNewUserUiState.copy(
-                    validacionDatosPersonalesUiState = validacionNewUserUiState.validacionDatosPersonalesUiState.copy(
-                        validacionNombre = validadorDatosPersonales.validadorNombre.valida(event.nombre)
-                    )
-                )
-            }
-
-            is DatosPersonalesEvent.DniChanged -> {
-                mostrarSnackState = false
-                mensajeSnackBarState = ""
-                newUserUiState = newUserUiState.copy(
-                    datosPersonalesUiState = newUserUiState.datosPersonalesUiState.copy(
-                        dni = event.dni,
-                    )
-                )
-                validacionNewUserUiState = validacionNewUserUiState.copy(
-                    validacionDatosPersonalesUiState = validacionNewUserUiState.validacionDatosPersonalesUiState.copy(
-                        validacionDni = validadorDatosPersonales.validadorDni.valida(event.dni)
-                    )
-                )
-            }
-
-            is DatosPersonalesEvent.TelefonoChanged -> {
-                mostrarSnackState = false
-                mensajeSnackBarState = ""
-                newUserUiState = newUserUiState.copy(
-                    datosPersonalesUiState = newUserUiState.datosPersonalesUiState.copy(
-                        telefono = event.telefono
-                    )
-                )
-                validacionNewUserUiState = validacionNewUserUiState.copy(
-                    validacionDatosPersonalesUiState = validacionNewUserUiState.validacionDatosPersonalesUiState.copy(
-                        validacionTelefono = validadorDatosPersonales.validadorTelefono.valida(event.telefono)
-                    )
-                )
-            }
-
-            is DatosPersonalesEvent.OnClickSiguiente -> {
-                validacionNewUserUiState = validacionNewUserUiState.copy(
-                    validacionDatosPersonalesUiState = validadorDatosPersonales.valida(
-                        newUserUiState.datosPersonalesUiState
-                    )
-                )
-                if (validacionNewUserUiState.validacionDatosPersonalesUiState.hayError) {
-                    mensajeSnackBarState =
-                        validacionNewUserUiState.validacionDatosPersonalesUiState.mensajeError!!
-                    mostrarSnackState = true
-                    incrementaPaginaState = 0
-
-                } else {
+            is NewUserEvent.onClickCrearCliente -> {
+                viewModelScope.launch {
                     mostrarSnackState = false
-                    incrementaPaginaState = 1
+                    validacionNewUserUiState = validadorNewUser.valida(newUserUiState)
+                    if (validacionNewUserUiState.hayError) {
+                        mensajeSnackBarState = validacionNewUserUiState.mensajeError!!
+                        mostrarSnackState = true
+                    } else {
+                        mostrarSnackState = true
+                        creaCuenta()
+                        if (estaCreadaCuenta) {
+                            mensajeSnackBarState = "Cuenta creada correctamente"
+                            var navOptions = NavOptions.Builder().apply {
+                                setPopUpTo(
+                                    HomeRoute, true, false
+                                )
+                            }
+                            event.onNavigateToLogin?.invoke(
+                                newUserUiState.correo,
+                                navOptions.build()
+                            )
+                        } else mensajeSnackBarState = "Ese cliente ya existe"
+                    }
                 }
             }
         }
     }
 
+    /*
+        fun onDatosPersonalesEvent(event: DatosPersonalesEvent) {
+
+            when (event) {
+                is DatosPersonalesEvent.NombreChanged -> {
+                    mostrarSnackState = false
+                    mensajeSnackBarState = ""
+                    newUserUiState = newUserUiState.copy(
+                        datosPersonalesUiState = newUserUiState.datosPersonalesUiState.copy(nombre = event.nombre)
+                    )
+                    validacionNewUserUiState = validacionNewUserUiState.copy(
+                        validacionDatosPersonalesUiState = validacionNewUserUiState.validacionDatosPersonalesUiState.copy(
+                            validacionNombre = validadorDatosPersonales.validadorNombre.valida(event.nombre)
+                        )
+                    )
+                }
+
+                is DatosPersonalesEvent.DniChanged -> {
+                    mostrarSnackState = false
+                    mensajeSnackBarState = ""
+                    newUserUiState = newUserUiState.copy(
+                        datosPersonalesUiState = newUserUiState.datosPersonalesUiState.copy(
+                            dni = event.dni,
+                        )
+                    )
+                    validacionNewUserUiState = validacionNewUserUiState.copy(
+                        validacionDatosPersonalesUiState = validacionNewUserUiState.validacionDatosPersonalesUiState.copy(
+                            validacionDni = validadorDatosPersonales.validadorDni.valida(event.dni)
+                        )
+                    )
+                }
+
+                is DatosPersonalesEvent.TelefonoChanged -> {
+                    mostrarSnackState = false
+                    mensajeSnackBarState = ""
+                    newUserUiState = newUserUiState.copy(
+                        datosPersonalesUiState = newUserUiState.datosPersonalesUiState.copy(
+                            telefono = event.telefono
+                        )
+                    )
+                    validacionNewUserUiState = validacionNewUserUiState.copy(
+                        validacionDatosPersonalesUiState = validacionNewUserUiState.validacionDatosPersonalesUiState.copy(
+                            validacionTelefono = validadorDatosPersonales.validadorTelefono.valida(event.telefono)
+                        )
+                    )
+                }
+
+                is DatosPersonalesEvent.OnClickSiguiente -> {
+                    validacionNewUserUiState = validacionNewUserUiState.copy(
+                        validacionDatosPersonalesUiState = validadorDatosPersonales.valida(
+                            newUserUiState.datosPersonalesUiState
+                        )
+                    )
+                    if (validacionNewUserUiState.validacionDatosPersonalesUiState.hayError) {
+                        mensajeSnackBarState =
+                            validacionNewUserUiState.validacionDatosPersonalesUiState.mensajeError!!
+                        mostrarSnackState = true
+                        incrementaPaginaState = 0
+
+                    } else {
+                        mostrarSnackState = false
+                        incrementaPaginaState = 1
+                    }
+                }
+            }
+        }
+    */
+    /*
     fun onDireccionEvent(event: DireccionEvent) {
         when (event) {
             is DireccionEvent.CalleChanged -> {
@@ -276,69 +304,71 @@ class NewUserViewModel @Inject constructor(
         }
     }
 
-    fun onNewUserPasswordEvent(event: NewUserPasswordEvent) {
-        when (event) {
-            is NewUserPasswordEvent.LoginChanged -> {
-                mostrarSnackState = false
-                mensajeSnackBarState = ""
-                newUserUiState = newUserUiState.copy(
-                    newUserPasswordUiState = newUserUiState.newUserPasswordUiState.copy(
-                        login = event.login
-                    )
-                )
-                validacionNewUserUiState = validacionNewUserUiState.copy(
-                    validacionLoginPasswordUiState = validacionNewUserUiState.validacionLoginPasswordUiState.copy(
-                        validacionLogin = validadorNewUserPassword.validacionLogin.valida(event.login)
-                    )
-                )
-            }
-
-            is NewUserPasswordEvent.PasswordChanged -> {
-                mostrarSnackState = false
-                mensajeSnackBarState = ""
-                newUserUiState = newUserUiState.copy(
-                    newUserPasswordUiState = newUserUiState.newUserPasswordUiState.copy(
-                        password = event.password,
-                    )
-                )
-                validacionNewUserUiState = validacionNewUserUiState.copy(
-                    validacionLoginPasswordUiState = validacionNewUserUiState.validacionLoginPasswordUiState.copy(
-                        validacionPassword = validadorNewUserPassword.validacionPassword.valida(
-                            event.password
+     */
+    /*
+        fun onNewUserPasswordEvent(event: NewUserPasswordEvent) {
+            when (event) {
+                is NewUserPasswordEvent.LoginChanged -> {
+                    mostrarSnackState = false
+                    mensajeSnackBarState = ""
+                    newUserUiState = newUserUiState.copy(
+                        newUserPasswordUiState = newUserUiState.newUserPasswordUiState.copy(
+                            login = event.login
                         )
                     )
-                )
-            }
+                    validacionNewUserUiState = validacionNewUserUiState.copy(
+                        validacionLoginPasswordUiState = validacionNewUserUiState.validacionLoginPasswordUiState.copy(
+                            validacionLogin = validadorNewUserPassword.validacionLogin.valida(event.login)
+                        )
+                    )
+                }
 
-            is NewUserPasswordEvent.onClickCrearCliente -> {
-                viewModelScope.launch {
-                    incrementaPaginaState = 0
+                is NewUserPasswordEvent.PasswordChanged -> {
                     mostrarSnackState = false
-                    validacionNewUserUiState = validadorNewUser.valida(newUserUiState)
-                    if (validacionNewUserUiState.hayError) {
-                        mensajeSnackBarState = validacionNewUserUiState.mensajeError!!
-                        mostrarSnackState = true
-                    } else {
-                        mostrarSnackState = true
-                        creaCuenta()
-                        if (estaCreadaCuenta) {
-                            mensajeSnackBarState = "Cuenta creada correctamente"
-                            var navOptions = NavOptions.Builder().apply {
-                                setPopUpTo(
-                                    HomeRoute, true, false
-                                )
-                            }
-                            event.onNavigateToLogin?.invoke(
-                                newUserUiState.newUserPasswordUiState.login,
-                                navOptions.build()
+                    mensajeSnackBarState = ""
+                    newUserUiState = newUserUiState.copy(
+                        newUserPasswordUiState = newUserUiState.newUserPasswordUiState.copy(
+                            password = event.password,
+                        )
+                    )
+                    validacionNewUserUiState = validacionNewUserUiState.copy(
+                        validacionLoginPasswordUiState = validacionNewUserUiState.validacionLoginPasswordUiState.copy(
+                            validacionPassword = validadorNewUserPassword.validacionPassword.valida(
+                                event.password
                             )
-                        } else mensajeSnackBarState = "Ese cliente ya existe"
+                        )
+                    )
+                }
+
+                is NewUserPasswordEvent.onClickCrearCliente -> {
+                    viewModelScope.launch {
+                        incrementaPaginaState = 0
+                        mostrarSnackState = false
+                        validacionNewUserUiState = validadorNewUser.valida(newUserUiState)
+                        if (validacionNewUserUiState.hayError) {
+                            mensajeSnackBarState = validacionNewUserUiState.mensajeError!!
+                            mostrarSnackState = true
+                        } else {
+                            mostrarSnackState = true
+                            creaCuenta()
+                            if (estaCreadaCuenta) {
+                                mensajeSnackBarState = "Cuenta creada correctamente"
+                                var navOptions = NavOptions.Builder().apply {
+                                    setPopUpTo(
+                                        HomeRoute, true, false
+                                    )
+                                }
+                                event.onNavigateToLogin?.invoke(
+                                    newUserUiState.newUserPasswordUiState.login,
+                                    navOptions.build()
+                                )
+                            } else mensajeSnackBarState = "Ese cliente ya existe"
+                        }
                     }
                 }
             }
         }
-    }
-
+    */
     suspend private fun creaCuenta() {
 
         estaCreadaCuenta = false
@@ -349,49 +379,39 @@ class NewUserViewModel @Inject constructor(
 
         }
 
-        val dniAnterior =
+        val correoAnterior =
             clientes.find {
-                it.dni == newUserUiState.datosPersonalesUiState.dni
+                it.correo == newUserUiState.correo
             }
-        val loginAnterior =
-            clientes.find { it.correo == newUserUiState.newUserPasswordUiState.login }
 
-        if (!esNuevoCliente && dniAnterior != null && loginAnterior != null) {
+        if (!esNuevoCliente && correoAnterior != null) {
             val cliente = creaCliente()
             clienteRepository.update(cliente.toCliente())
-            usuarioRepository.update(
-                Usuario(
-                    newUserUiState.newUserPasswordUiState.login,
-                    newUserUiState.newUserPasswordUiState.password
-                )
-            )
             estaCreadaCuenta = true
-        } else if (dniAnterior == null && loginAnterior == null) {
+        } else if (correoAnterior == null) {
             val cliente = creaCliente()
             clienteRepository.insert(cliente.toCliente())
-            usuarioRepository.insert(
-                Usuario(
-                    newUserUiState.newUserPasswordUiState.login,
-                    newUserUiState.newUserPasswordUiState.password
-                )
-            )
             estaCreadaCuenta = true
         }
     }
 
-    private fun creaCliente(): ClienteUiState {
-        val direccion =
+    private fun creaCliente(): NewUserUiState {
+        /*val direccion =
             DireccionClienteUiState(
                 newUserUiState.direccionUiState.calle,
                 newUserUiState.direccionUiState.ciudad,
                 newUserUiState.direccionUiState.codigoPostal
-            )
-        val cliente = ClienteUiState(
-            newUserUiState.datosPersonalesUiState.dni,
-            newUserUiState.newUserPasswordUiState.login,
-            newUserUiState.datosPersonalesUiState.nombre,
-            newUserUiState.datosPersonalesUiState.telefono,
-            direccion
+            )*/
+        val cliente = NewUserUiState(
+            newUserUiState.correo,
+            newUserUiState.contraseña,
+            newUserUiState.nombre,
+            newUserUiState.telefono,
+            newUserUiState.imagen,
+            newUserUiState.deseados,
+            newUserUiState.calle,
+            newUserUiState.ciudad,
+            newUserUiState.puntos
         )
         return cliente
     }
@@ -404,6 +424,14 @@ class NewUserViewModel @Inject constructor(
 
     fun inicializarCliente(cliente: Cliente) {
         viewModelScope.launch {
+            newUserUiState = newUserUiState.copy(
+                contraseña = cliente.contraseña, correo = cliente.correo,
+                nombre = cliente.nombre, ciudad = cliente.ciudad,
+                calle = cliente.calle, telefono = cliente.telefono,
+                deseados = cliente.deseados, imagen = cliente.imagen,
+                puntos = cliente.puntos
+            )
+            /*
             newUserUiState = newUserUiState.copy(
                 datosPersonalesUiState = DatosPersonalesUiState(
                     cliente.dni,
@@ -420,19 +448,28 @@ class NewUserViewModel @Inject constructor(
                     cliente.correo,
                     usuarioRepository.get(cliente.correo)?.password!!
                 )
-            )
+            )*/
         }
     }
 
-    private fun DireccionClienteUiState.toDireccion() =
-        Direccion(calle, ciudad, codigoPostal)
+    /* private fun DireccionClienteUiState.toDireccion() =
+         Direccion(calle, ciudad, codigoPostal)*/
 
-    private fun ClienteUiState.toCliente() = Cliente(
-        this.dni,
+    private fun NewUserUiState.toCliente() = Cliente(
+
         correo,
+        contraseña,
         nombre,
         telefono,
-        direccion?.toDireccion(),
-        emptyList<Int>().toMutableList()
+        imagen,
+        deseados,
+        calle,
+        ciudad,
+        puntos
+
     )
+
+    /*direccion?.toDireccion(),
+    emptyList<Int>().toMutableList()*/
+
 }

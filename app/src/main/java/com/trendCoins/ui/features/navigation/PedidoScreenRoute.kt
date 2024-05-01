@@ -6,8 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.pmdm.tienda.ui.features.pedidos.PedidosScreen
-import com.pmdm.tienda.ui.features.pedidos.PedidosViewModel
 
 
 const val PedidoRoute = "pedido/{dni}"

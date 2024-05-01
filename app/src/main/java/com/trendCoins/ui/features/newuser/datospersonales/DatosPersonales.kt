@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.pmdm.tienda.ui.composables.CircularImageFromResource
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldWithErrorState
 import com.pmdm.tienda.ui.composables.TextWithLine
+import com.trendCoins.R
 
 @Composable
 fun DatosPersonales(

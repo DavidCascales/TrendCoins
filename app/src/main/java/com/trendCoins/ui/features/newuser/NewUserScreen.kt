@@ -10,6 +10,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ReportProblem
+import androidx.compose.material3.Button
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -27,7 +28,9 @@ import androidx.navigation.NavOptions
 import com.pmdm.agenda.utilities.imagenes.Imagenes
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldCalle
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldCiudad
+import com.pmdm.tienda.ui.composables.OutlinedTextFieldEmail
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldName
+import com.pmdm.tienda.ui.composables.OutlinedTextFieldPassword
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldPhone
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonales
 import com.pmdm.tienda.ui.features.newuser.direccion.Direccion
@@ -35,6 +38,7 @@ import com.pmdm.tienda.ui.features.newuser.newuserpassword.NuevoUsuarioPassword
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesEvent
 import com.pmdm.tienda.ui.features.newuser.direccion.DireccionEvent
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
+import com.trendCoins.ui.features.newuser.NewUserEvent
 import com.trendCoins.utilities.RegistroSelectorDeImagenesConGetContent
 import kotlinx.coroutines.launch
 
@@ -46,16 +50,16 @@ fun NewUserScreenBuena(
     esNuevoClienteState:Boolean,
     mostrarSnack: Boolean,
     mensaje: String,
-    onDireccionEvent: (DireccionEvent) -> Unit,
-    onDatosPersonalesEvent: (DatosPersonalesEvent) -> Unit,
-    onNewUserPasswordEvent: (NewUserPasswordEvent) -> Unit,
+    onNewUserEvent: (NewUserEvent)-> Unit,
     onNavigateToLogin: ((correo: String, navOptions: NavOptions?) -> Unit)?,
     onFotoCambiada :(ImageBitmap)->Unit
 )
 {
     val selectorDeImagenes=RegistroSelectorDeImagenesConGetContent(onFotoCambiada)
     Column {
-        Image(modifier=Modifier.size(400.dp).clickable{
+        Image(modifier= Modifier
+            .size(400.dp)
+            .clickable {
                 selectorDeImagenes.launch("image/*")
             },painter = if (newUserUiState.imagen ==null) rememberVectorPainter(image = Icons.Filled.ReportProblem) else
             BitmapPainter(Imagenes.base64ToBitmap(newUserUiState.imagen!!)),
@@ -63,14 +67,39 @@ fun NewUserScreenBuena(
             contentScale = ContentScale.Crop)
 
         Spacer(modifier = Modifier.padding(10.dp) )
-        OutlinedTextFieldName(nombreState = , validacionState = , onValueChange = )
+        OutlinedTextFieldName(nombreState = newUserUiState.nombre,
+            validacionState = validacionNewUserUiState.validacionNombre,
+            onValueChange = {onNewUserEvent(NewUserEvent.NombreChanged(it))})
         Spacer(modifier = Modifier.padding(5.dp) )
-        OutlinedTextFieldPhone(telefonoState = , validacionState = , onValueChange = )
+        OutlinedTextFieldPhone(telefonoState = newUserUiState.telefono,
+            validacionState = validacionNewUserUiState.validacionTelefono,
+            onValueChange = {onNewUserEvent(NewUserEvent.TelefonoChanged(it))})
         Spacer(modifier = Modifier.padding(5.dp) )
-        OutlinedTextFieldCalle(calleState = , validacionState = , onValueChange = )
+        OutlinedTextFieldCalle(calleState = newUserUiState.calle,
+            validacionState = validacionNewUserUiState.validacionCalle,
+            onValueChange = {onNewUserEvent(NewUserEvent.CalleChanged(it))})
         Spacer(modifier = Modifier.padding(5.dp) )
-        OutlinedTextFieldCiudad(ciudadState = , validacionState = , onValueChange = )
+        OutlinedTextFieldCiudad(ciudadState = newUserUiState.ciudad,
+            validacionState = validacionNewUserUiState.validacionCiudad,
+            onValueChange = {onNewUserEvent(NewUserEvent.CiudadChanged(it))})
+        Spacer(modifier = Modifier.padding(5.dp) )
+        OutlinedTextFieldEmail(emailState = newUserUiState.correo,
+            validacionState = validacionNewUserUiState.validacionLogin,
+            onValueChange = {onNewUserEvent(NewUserEvent.LoginChanged(it))})
+        Spacer(modifier = Modifier.padding(5.dp) )
+        OutlinedTextFieldPassword(passwordState = newUserUiState.contraseña,
+            validacionState = validacionNewUserUiState.validacionPassword,
+            onValueChange = {onNewUserEvent(NewUserEvent.PasswordChanged(it))})
+
         /*boton*/
+
+        Button(
+            onClick = {onNewUserEvent(NewUserEvent.onClickCrearCliente(onNavigateToLogin))},
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text("Login")
+        }
 
         if (mostrarSnack) {
             if (mensaje.isNotEmpty()) Snackbar(
@@ -84,6 +113,9 @@ fun NewUserScreenBuena(
 
     }
 }
+
+
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewUserScreen(

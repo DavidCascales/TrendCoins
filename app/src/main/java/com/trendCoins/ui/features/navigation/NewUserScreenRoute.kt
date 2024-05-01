@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.pmdm.tienda.ui.features.newuser.NewUserScreen
+import com.pmdm.tienda.ui.features.newuser.NewUserScreenBuena
 import com.pmdm.tienda.ui.features.newuser.NewUserViewModel
 import com.pmdm.tienda.ui.features.newuser.direccion.DireccionEvent
 
@@ -29,6 +30,17 @@ fun NavGraphBuilder.newUserScreenRoute(
             onDatosPersonalesEvent = newUserViewModel::onDatosPersonalesEvent,
             onNewUserPasswordEvent = newUserViewModel::onNewUserPasswordEvent,
             onNavigateToLogin=onNavigateToLogin
+        )
+
+        NewUserScreenBuena(
+            newUserUiState = newUserViewModel.newUserUiState,
+            validacionNewUserUiState = newUserViewModel.validacionNewUserUiState,
+            esNuevoClienteState = newUserViewModel.esNuevoCliente,
+            mostrarSnack = newUserViewModel.mostrarSnackState,
+            mensaje = newUserViewModel.mensajeSnackBarState,
+            onNavigateToLogin = onNavigateToLogin,
+            onNewUserEvent = newUserViewModel::onNewUserEvent,
+            onFotoCambiada = {newUserViewModel.onFotoCambiada(it)}
         )
     }
 

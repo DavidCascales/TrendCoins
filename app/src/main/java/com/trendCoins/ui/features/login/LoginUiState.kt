@@ -9,8 +9,8 @@ data class LoginUiState(
     val telefono: String,
     val imagen: String,
     val deseados: MutableList<Int>,
-    val calle: String?,
-    val ciudad: String?,
+    val calle: String,
+    val ciudad: String,
     val puntos: Int,
     val estaLogeado: Boolean
 ) {
