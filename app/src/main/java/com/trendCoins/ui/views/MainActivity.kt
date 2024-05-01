@@ -12,8 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.pmdm.tienda.ui.features.login.LoginScreen
+import com.pmdm.tienda.ui.features.newuser.NewUserScreenBuena
+import com.pmdm.tienda.ui.features.newuser.NewUserViewModel
 import com.pmdm.tienda.ui.features.tienda.TiendaViewModel
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
+import com.pmdm.tienda.ui.navigation.navigateToLogin
 import com.trendCoins.ui.theme.TrendCoinsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,17 +27,28 @@ class MainActivity : ComponentActivity() {
         setContent {
             TrendCoinsTheme {
                 val vm:TiendaViewModel by viewModels()
+                val newUserViewModel :NewUserViewModel by viewModels()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
+                ) {/*
                     Escaparate(
                         articulos = vm.articulosState?.toList()!!,
                         articuloSeleccionado = vm.articuloSeleccionadoState,
                         tallaUiState = vm.tallaUiState,
                         onTallaEvent = vm::onTallaEvent,
                         onTiendaEvent = vm::onTiendaEvent
+                    )*/
+                    NewUserScreenBuena(
+                        newUserUiState = newUserViewModel.newUserUiState,
+                        validacionNewUserUiState = newUserViewModel.validacionNewUserUiState,
+                        esNuevoClienteState = newUserViewModel.esNuevoCliente,
+                        mostrarSnack = newUserViewModel.mostrarSnackState,
+                        mensaje = newUserViewModel.mensajeSnackBarState,
+                        onNavigateToLogin =  TODO(),
+                        onNewUserEvent = newUserViewModel::onNewUserEvent,
+                        onFotoCambiada = {newUserViewModel.onFotoCambiada(it)}
                     )
                 }
             }
