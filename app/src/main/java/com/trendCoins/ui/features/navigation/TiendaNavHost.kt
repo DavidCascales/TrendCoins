@@ -15,7 +15,6 @@ import com.pmdm.tienda.ui.navigation.navigateToNewUser
 import com.pmdm.tienda.ui.navigation.navigateToPedido
 import com.pmdm.tienda.ui.navigation.navigateToTienda
 import com.pmdm.tienda.ui.navigation.newUserScreenRoute
-import com.pmdm.tienda.ui.navigation.pedidosScreenRoute
 import com.pmdm.tienda.ui.navigation.tiendaScreenRoute
 
 

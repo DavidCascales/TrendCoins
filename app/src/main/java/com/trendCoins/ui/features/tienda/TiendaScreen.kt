@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.pmdm.tienda.ui.features.tienda.components.Carrito
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperior
+import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
 import com.trendCoins.models.Cliente
 import kotlinx.coroutines.launch
 
@@ -53,7 +54,7 @@ fun TiendaScreen(
     val contexto = LocalContext.current
     Scaffold(
         topBar = {
-            BarraSuperior(
+            BarraSuperiorBuena(
                 filtro = filtro,
                 estaFiltrando = estaFiltrando,
                 totalCompra = totalCompra,
@@ -72,6 +73,8 @@ fun TiendaScreen(
                 onClickCompar = { onTiendaEvent(TiendaEvent.OnClickComprar) },
                 onClickCasa = { onTiendaEvent(TiendaEvent.OnClickCasa) }
             )
+
+
         },
         bottomBar = {/*
             BarraNavegacion(

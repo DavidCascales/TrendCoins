@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 
 
 const val PedidoRoute = "pedido/{dni}"
-
+/*
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.pedidosScreenRoute(
     pedidosViewModel: PedidosViewModel
@@ -28,7 +28,7 @@ fun NavGraphBuilder.pedidosScreenRoute(
         )
     }
 }
-
+*/
 fun NavController.navigateToPedido(valorDni: String, navOptions: NavOptions? = null) {
     this.navigate("pedido/$valorDni", navOptions)
 }

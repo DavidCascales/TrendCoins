@@ -24,6 +24,7 @@ import com.pmdm.tienda.ui.navigation.HomeRoute
 import com.trendCoins.data.ClienteRepository
 import com.trendCoins.models.Cliente
 import com.trendCoins.ui.features.newuser.NewUserEvent
+import com.trendCoins.utilities.Encriptacion.toSHA256
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -369,6 +370,7 @@ class NewUserViewModel @Inject constructor(
             }
         }
     */
+
     suspend private fun creaCuenta() {
 
         estaCreadaCuenta = false
@@ -385,7 +387,7 @@ class NewUserViewModel @Inject constructor(
             }
 
         if (!esNuevoCliente && correoAnterior != null) {
-            val cliente = creaCliente()
+            val cliente = editaCliente()
             clienteRepository.update(cliente.toCliente())
             estaCreadaCuenta = true
         } else if (correoAnterior == null) {
@@ -393,6 +395,27 @@ class NewUserViewModel @Inject constructor(
             clienteRepository.insert(cliente.toCliente())
             estaCreadaCuenta = true
         }
+    }
+
+    private fun editaCliente(): NewUserUiState {
+        /*val direccion =
+            DireccionClienteUiState(
+                newUserUiState.direccionUiState.calle,
+                newUserUiState.direccionUiState.ciudad,
+                newUserUiState.direccionUiState.codigoPostal
+            )*/
+        val cliente = NewUserUiState(
+            newUserUiState.correo,
+            newUserUiState.contraseña,
+            newUserUiState.nombre,
+            newUserUiState.telefono,
+            newUserUiState.imagen,
+            newUserUiState.deseados,
+            newUserUiState.calle,
+            newUserUiState.ciudad,
+            newUserUiState.puntos
+        )
+        return cliente
     }
 
     private fun creaCliente(): NewUserUiState {
@@ -404,7 +427,7 @@ class NewUserViewModel @Inject constructor(
             )*/
         val cliente = NewUserUiState(
             newUserUiState.correo,
-            newUserUiState.contraseña,
+            newUserUiState.contraseña.toSHA256(),
             newUserUiState.nombre,
             newUserUiState.telefono,
             newUserUiState.imagen,

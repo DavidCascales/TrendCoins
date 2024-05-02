@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.tienda.components
+  package com.pmdm.tienda.ui.features.tienda.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

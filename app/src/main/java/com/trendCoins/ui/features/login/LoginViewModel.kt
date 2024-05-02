@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.pmdm.tienda.data.services.ApiServicesException
 import com.trendCoins.data.ClienteRepository
 import com.trendCoins.models.Cliente
+import com.trendCoins.utilities.Encriptacion.toSHA256
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -76,7 +77,7 @@ class LoginViewModel @Inject constructor(
         val usuario = usuarioUiState.toUsuario()
         try {
             clienteRepository.get().forEach {
-                if (usuario.correo == it.correo && usuario.contraseña == it.contraseña) return true
+                if (usuario.correo == it.correo && usuario.contraseña.toSHA256() == it.contraseña) return true
             }
         } catch (e: ApiServicesException) {
         }

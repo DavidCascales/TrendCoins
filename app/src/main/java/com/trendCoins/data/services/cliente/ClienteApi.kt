@@ -6,10 +6,10 @@ data class ClienteApi(
     val password:String,
     val nombre: String,
     val telefono: String,
-    val imagen:String,
+    val imagen:String?,
     val deseados:String,
-    val calle: String?,
-    val ciudad: String?,
+    val calle: String,
+    val ciudad: String,
     val puntos:Int)
 
 

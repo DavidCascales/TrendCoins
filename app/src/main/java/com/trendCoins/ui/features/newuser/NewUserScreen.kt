@@ -9,6 +9,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.material3.Button
 import androidx.compose.material3.Snackbar
@@ -32,7 +33,6 @@ import com.pmdm.tienda.ui.composables.OutlinedTextFieldEmail
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldName
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldPassword
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldPhone
-import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonales
 import com.pmdm.tienda.ui.features.newuser.direccion.Direccion
 import com.pmdm.tienda.ui.features.newuser.newuserpassword.NuevoUsuarioPassword
 import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesEvent
@@ -56,13 +56,14 @@ fun NewUserScreenBuena(
 )
 {
     val selectorDeImagenes=RegistroSelectorDeImagenesConGetContent(onFotoCambiada)
-    Column {
+    Column (horizontalAlignment = CenterHorizontally){
+        Spacer(modifier = Modifier.padding(10.dp) )
         Image(modifier= Modifier
-            .size(400.dp)
+            .size(200.dp)
             .clickable {
                 selectorDeImagenes.launch("image/*")
-            },painter = if (newUserUiState.imagen ==null) rememberVectorPainter(image = Icons.Filled.ReportProblem) else
-            BitmapPainter(Imagenes.base64ToBitmap(newUserUiState.imagen!!)),
+            },painter = if (newUserUiState.imagen == null || newUserUiState.imagen == "") rememberVectorPainter(image = Icons.Filled.Person) else
+            BitmapPainter(Imagenes.base64ToBitmap(newUserUiState.imagen)),
             contentDescription = newUserUiState.nombre,
             contentScale = ContentScale.Crop)
 
@@ -83,13 +84,18 @@ fun NewUserScreenBuena(
             validacionState = validacionNewUserUiState.validacionCiudad,
             onValueChange = {onNewUserEvent(NewUserEvent.CiudadChanged(it))})
         Spacer(modifier = Modifier.padding(5.dp) )
-        OutlinedTextFieldEmail(emailState = newUserUiState.correo,
-            validacionState = validacionNewUserUiState.validacionLogin,
-            onValueChange = {onNewUserEvent(NewUserEvent.LoginChanged(it))})
-        Spacer(modifier = Modifier.padding(5.dp) )
-        OutlinedTextFieldPassword(passwordState = newUserUiState.contraseña,
-            validacionState = validacionNewUserUiState.validacionPassword,
-            onValueChange = {onNewUserEvent(NewUserEvent.PasswordChanged(it))})
+
+        if (esNuevoClienteState)
+        {
+            OutlinedTextFieldEmail(emailState = newUserUiState.correo,
+                validacionState = validacionNewUserUiState.validacionLogin,
+                onValueChange = {onNewUserEvent(NewUserEvent.LoginChanged(it))})
+            Spacer(modifier = Modifier.padding(5.dp) )
+            OutlinedTextFieldPassword(passwordState = newUserUiState.contraseña,
+                validacionState = validacionNewUserUiState.validacionPassword,
+                onValueChange = {onNewUserEvent(NewUserEvent.PasswordChanged(it))})
+        }
+
 
         /*boton*/
 
@@ -98,7 +104,7 @@ fun NewUserScreenBuena(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text("Login")
+            Text(if(esNuevoClienteState)"Crear cuenta" else "Modificar")
         }
 
         if (mostrarSnack) {
@@ -114,7 +120,7 @@ fun NewUserScreenBuena(
     }
 }
 
-
+/*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -215,7 +221,7 @@ fun NewUserScreen(
             }
         }
     }
-}
+}*/
 
 
 

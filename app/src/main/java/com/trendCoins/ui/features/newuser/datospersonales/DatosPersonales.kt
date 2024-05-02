@@ -1,7 +1,7 @@
 package com.pmdm.tienda.ui.features.newuser.datospersonales
 
 
-import com.pmdm.tienda.R
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,7 +14,7 @@ import com.pmdm.tienda.ui.composables.CircularImageFromResource
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldWithErrorState
 import com.pmdm.tienda.ui.composables.TextWithLine
 import com.trendCoins.R
-
+/*
 @Composable
 fun DatosPersonales(
     esNuevoClienteState:Boolean,
@@ -80,24 +80,24 @@ fun DatosPersonales(
             }
         }
     }
-}
+}*/
 
-@Preview(showBackground = true)
-@Composable
-fun DatosPersonalesTest() {
-    var datosPersonalesUIState by remember {
-        mutableStateOf(DatosPersonalesUiState())
-    }
-    var validadorDatosPersonalesUIState
-            by remember {
-                mutableStateOf(ValidacionDatosPersonalesUiState())
-            }
-
-    DatosPersonales(
-        esNuevoClienteState = true,
-        datosPersonalesUIState = datosPersonalesUIState,
-        validadorDatosPersonalesUIState = validadorDatosPersonalesUIState,
-        {}
-    )
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DatosPersonalesTest() {
+//    var datosPersonalesUIState by remember {
+//        mutableStateOf(DatosPersonalesUiState())
+//    }
+//    var validadorDatosPersonalesUIState
+//            by remember {
+//                mutableStateOf(ValidacionDatosPersonalesUiState())
+//            }
+//
+//    DatosPersonales(
+//        esNuevoClienteState = true,
+//        datosPersonalesUIState = datosPersonalesUIState,
+//        validadorDatosPersonalesUIState = validadorDatosPersonalesUIState,
+//        {}
+//    )
+//
+//}

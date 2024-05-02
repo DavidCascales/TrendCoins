@@ -10,10 +10,11 @@ import androidx.compose.ui.unit.dp
 import com.pmdm.tienda.ui.composables.CircularImageFromResource
 import com.pmdm.tienda.ui.composables.OutlinedTextFieldWithErrorState
 import com.pmdm.tienda.ui.composables.TextWithLine
-import com.pmdm.tienda.R
+
 import com.pmdm.tienda.ui.features.newuser.direccion.DireccionEvent
 import com.pmdm.tienda.ui.features.newuser.direccion.DireccionUiState
 import com.pmdm.tienda.ui.features.newuser.direccion.ValidacionDireccionUiState
+import com.trendCoins.R
 
 
 @Composable
@@ -36,7 +37,7 @@ fun Direccion(
         )
 
         {
-            CircularImageFromResource(idImageResource = R.drawable.logearse , contentDescription = "Logearse")
+            //CircularImageFromResource(idImageResource = R.drawable.logearse , contentDescription = "Logearse")
             Spacer(modifier = Modifier.height(20.dp))
 
             TextWithLine(

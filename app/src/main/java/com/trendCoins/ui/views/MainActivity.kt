@@ -1,5 +1,8 @@
 package com.trendCoins.ui.views
 
+import TiendaNavHost
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,8 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContent {
             TrendCoinsTheme {
                 val vm:TiendaViewModel by viewModels()
@@ -32,7 +37,12 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {/*
+                ) {
+
+
+
+                    TiendaNavHost()
+                    /*
                     Escaparate(
                         articulos = vm.articulosState?.toList()!!,
                         articuloSeleccionado = vm.articuloSeleccionadoState,
@@ -40,7 +50,8 @@ class MainActivity : ComponentActivity() {
                         onTallaEvent = vm::onTallaEvent,
                         onTiendaEvent = vm::onTiendaEvent
                     )*/
-                    NewUserScreenBuena(
+
+                    /*NewUserScreenBuena(
                         newUserUiState = newUserViewModel.newUserUiState,
                         validacionNewUserUiState = newUserViewModel.validacionNewUserUiState,
                         esNuevoClienteState = newUserViewModel.esNuevoCliente,
@@ -49,7 +60,7 @@ class MainActivity : ComponentActivity() {
                         onNavigateToLogin =  TODO(),
                         onNewUserEvent = newUserViewModel::onNewUserEvent,
                         onFotoCambiada = {newUserViewModel.onFotoCambiada(it)}
-                    )
+                    )*/
                 }
             }
         }

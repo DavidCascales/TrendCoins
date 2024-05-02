@@ -329,7 +329,7 @@ fun OutlinedTextFieldName(
         label = label,
         textoState = nombreState,
         textoPista = "Paco Pérez",
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Person,
