@@ -226,7 +226,8 @@ fun BarraSuperiorBuena(
             Row(modifier=Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = "Trend Coins",
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Blue
                 )
             }
         },

@@ -19,6 +19,7 @@ fun NavGraphBuilder.tiendaScreenRoute(
     onNavigateToLogin:()->Unit
 ) {
 
+
     composable(TiendaRoute) {
         val correo = it.arguments?.getString("correo")
        requireNotNull(correo)
@@ -39,7 +40,13 @@ fun NavGraphBuilder.tiendaScreenRoute(
             onTallaEvent = tiendaViewModel::onTallaEvent,
             onNavigateToPedido = onNavigateToPedido,
             onNavigateToNewUser = onNavigateToNewUser,
-            onNavigateToLogin = onNavigateToLogin
+            onNavigateToLogin = onNavigateToLogin,
+            screenState=tiendaViewModel.screenState,
+            onScreenChange={ it -> tiendaViewModel.onChangeScreen(it)},
+            listaRuleta = tiendaViewModel.resultadosRuleta,
+            mostrarResultado = tiendaViewModel.verResultadoRuleta,
+            onObtenerResultadoRuleta = {tiendaViewModel.onObtenerResultadoRuleta(it)},
+            resultadoFinalRuleta = {tiendaViewModel.resultadoFinalRuleta(it)}
         )
     }
 }

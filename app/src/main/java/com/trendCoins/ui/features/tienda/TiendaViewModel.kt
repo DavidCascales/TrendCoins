@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trendCoins.data.ClienteRepository
 import com.trendCoins.data.ArticuloRepository
-import com.pmdm.tienda.data.services.ApiServicesException
 import com.trendCoins.models.Articulo
 import com.trendCoins.models.Cliente
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -26,11 +26,56 @@ class TiendaViewModel @Inject constructor(
     private val clienteRepository: ClienteRepository
 ) : ViewModel() {
 
+    val resultadosRuleta by
+    mutableStateOf(
+        listOf(
+            "10",
+            "5",
+            "1",
+            "20",
+            "100",
+            "33",
+            "5",
+            "0"
+        )
+    )
 
-    val login = "pepe@gmail.com"
+    var verResultadoRuleta by mutableStateOf(false)
 
     var clienteState by mutableStateOf(Cliente())
 
+    var screenState by mutableStateOf(0)
+
+    fun onChangeScreen(indexScreen: Int) {
+        screenState = indexScreen
+    }
+
+    fun getPuntosusuario(): Int {
+        return clienteState.puntos
+    }
+
+    val onMostrarSnackBar: () -> Unit by mutableStateOf({
+        verResultadoRuleta = !verResultadoRuleta
+    })
+
+    fun resultadoFinalRuleta(puntos: Int) {
+        onMostrarSnackBar
+        sumaPuntos(onObtenerResultadoRuleta(puntos))
+        viewModelScope.launch {
+            delay(2000)
+            onMostrarSnackBar()
+        }
+
+    }
+
+    fun sumaPuntos(puntos: Int) {
+        clienteState = clienteState.copy(puntos = getPuntosusuario() + puntos)
+    }
+
+    fun onObtenerResultadoRuleta(resultado: Int): Int {
+        return resultadosRuleta[resultado].toInt()
+
+    }
 
     var filtroState by mutableStateOf("")
     var carritoState by mutableStateOf(false)
@@ -116,7 +161,7 @@ class TiendaViewModel @Inject constructor(
                 }
             }
 
-            is TiendaEvent.OnClickCasa -> {
+            is TiendaEvent.OnClickQuitarFiltro -> {
                 viewModelScope.launch {
                     articulosState = getArticulos()
                     filtroState = ""
@@ -218,9 +263,8 @@ class TiendaViewModel @Inject constructor(
         articuloRepository.get(filtro)?.toMutableList()?.toArticulosUiState()?.checkFavoritos()
             ?.toMutableStateList()
 
-
     /*suspend private fun getArticulosFavoritos(): MutableList<ArticuloUiState>? {
-        return articuloRepository.get(clienteState.favoritos)?.toMutableList()?.toArticulosUiState()
+        return articuloRepository.get(clienteState.deseados)?.toMutableList()?.toArticulosUiState()
             ?.checkFavoritos()
     }*/
     suspend private fun getArticulosFavoritos(): MutableList<ArticuloUiState> {
@@ -282,18 +326,38 @@ class TiendaViewModel @Inject constructor(
     }
 
     suspend fun inicializaCliente(correo: String?): Cliente {
-        if (correo == null) return Cliente("", "", "", "","",  mutableListOf(),"","",0)
+        if (correo == null) return Cliente("", "", "", "", "", mutableListOf(), "", "", 0)
         else {
             val c = clienteRepository.getClienteCorreo(correo)
 
-            return Cliente(c.correo, c.contraseña ,c.nombre, c.telefono, c.imagen,c.deseados,c.calle,c.ciudad,c.puntos)
+            return Cliente(
+                c.correo,
+                c.contraseña,
+                c.nombre,
+                c.telefono,
+                c.imagen,
+                c.deseados,
+                c.calle,
+                c.ciudad,
+                c.puntos
+            )
         }
     }
 
     fun actualizaCliente(correo: String) {
         viewModelScope.launch {
             val c = clienteRepository.getClienteCorreo(correo)
-            clienteState = Cliente(c.correo, c.contraseña ,c.nombre, c.telefono, c.imagen,c.deseados,c.calle,c.ciudad,c.puntos)
+            clienteState = Cliente(
+                c.correo,
+                c.contraseña,
+                c.nombre,
+                c.telefono,
+                c.imagen,
+                c.deseados,
+                c.calle,
+                c.ciudad,
+                c.puntos
+            )
 //            pedidoUiState = pedidoUiState.copy(dniCliente = c.dni)
             if (clienteState.deseados.size > 0) articulosState =
                 articulosState.checkFavoritos().toMutableStateList()

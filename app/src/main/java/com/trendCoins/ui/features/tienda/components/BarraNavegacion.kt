@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Badge
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.Shop
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.VideogameAsset
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,36 +30,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/*
+
 @Composable
 fun BarraNavegacion(
-    numeroArticulos: Int,
-    onClickFavoritos: () -> Unit,
-    onClickCarrito: () -> Unit,
-    onClickCasa: () -> Unit,
-    onClickPedidos:()->Unit
+    onScreenChange: (Int) -> Unit
 ) {
 
-    data class OpcionMenu(val descripcion: String, val icono: ImageVector, val accion: () -> Unit)
+    data class OpcionMenu(val descripcion: String, val icono: ImageVector)
 
     val items = listOf(
-        OpcionMenu("Volver", Icons.Filled.Home, onClickCasa),
-        OpcionMenu("Favoritos", Icons.Filled.Favorite, onClickFavoritos),
-        OpcionMenu("Pedidos", Icons.Filled.Badge, onClickPedidos),
-        OpcionMenu("Carrito", Icons.Filled.ShoppingCart, onClickCarrito),
+        OpcionMenu("Volver", Icons.Filled.Shop),
+        OpcionMenu("Favoritos", Icons.Filled.Bookmark),
+        OpcionMenu("Pedidos", Icons.Filled.ChangeCircle),
+        OpcionMenu("Juego Clicker", Icons.Filled.VideogameAsset),
+        OpcionMenu("Carrito", Icons.Filled.ShoppingCart),
     )
     var selectedItem by remember { mutableIntStateOf(0) }
     NavigationBar(modifier = Modifier.height(35.dp)) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(icon = {
-                if (item.icono == Icons.Filled.ShoppingCart)
-                    CarritoCompra(numeroArticulos)
-                else Icon(
+                Icon(
                     imageVector = item.icono,
                     contentDescription = item.descripcion,
                 )
             }, selected = selectedItem == index, onClick = {
-                item.accion()
+                onScreenChange(index)
                 selectedItem = index
             })
         }
@@ -89,9 +84,9 @@ fun CarritoCompra(numeroArticulos: Int) {
                 })
     }
 }
-
+/*
 @Preview
 @Composable
 fun bottomAppBarTest() {
-    BarraNavegacion( 15, {}, {}, {},{})
+    BarraNavegacion(15, {}, {}, {}, {})
 }*/

@@ -1,15 +1,14 @@
 package com.pmdm.tienda.ui.features.tienda
 
 import android.annotation.SuppressLint
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,12 +17,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.pmdm.tienda.ui.features.tienda.components.Carrito
+import com.pmdm.tienda.ui.features.tienda.components.BarraNavegacion
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
-import com.pmdm.tienda.ui.features.tienda.components.BarraSuperior
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
 import com.trendCoins.models.Cliente
-import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,6 +42,12 @@ fun TiendaScreen(
     onNavigateToPedido: (String) -> Unit,
     onNavigateToNewUser: (String) -> Unit,
     onNavigateToLogin: () -> Unit,
+    screenState: Int,
+    onScreenChange: (Int) -> Unit,
+    mostrarResultado: Boolean,
+    onObtenerResultadoRuleta: (Int) -> Int,
+    listaRuleta: List<String>,
+    resultadoFinalRuleta: (Int) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -71,22 +74,16 @@ fun TiendaScreen(
                     }
                 },
                 onClickCompar = { onTiendaEvent(TiendaEvent.OnClickComprar) },
-                onClickCasa = { onTiendaEvent(TiendaEvent.OnClickCasa) }
+                onClickCasa = { onTiendaEvent(TiendaEvent.OnClickQuitarFiltro) }
             )
 
 
         },
-        bottomBar = {/*
+        bottomBar = {
             BarraNavegacion(
-                numeroArticulos = numerArticulos,
-                onClickFavoritos = { onTiendaEvent(TiendaEvent.OnClickListarFavoritos) },
-                onClickCasa = {
-                    onTiendaEvent(TiendaEvent.OnClickCasa)
-                },
-                onClickCarrito = { onTiendaEvent(TiendaEvent.OnClickCarrito) },
-                onClickPedidos = { onNavigateToPedido(clienteUiState.dni) }
+                onScreenChange = onScreenChange
             )
-        */},
+        },
     ) {
 
         Box(
@@ -96,33 +93,62 @@ fun TiendaScreen(
                 .padding(it)
         )
         {
-            if (!carrito) {
-                Escaparate(
-                    articulos = articulos,
-                    articuloSeleccionado = articuloSeleccionado,
-                    tallaUiState = tallaUiState,
-                    onTallaEvent = onTallaEvent,
-                    onTiendaEvent = onTiendaEvent
-                )
-            } else Carrito(pedido = pedido, onTiendaEvent = onTiendaEvent)
-        }
-        BackHandler(salirState) {
-            if (carrito || estaFiltrando || muestraFavoritos) {
-                onTiendaEvent(TiendaEvent.OnClickCasa)
-                salirState = true
-            } else {
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "Pulse otra vez para salir de la tienda", duration = SnackbarDuration.Short
+            when (screenState) {
+                0 -> {
+                    Escaparate(
+                        articulos = articulos,
+                        articuloSeleccionado = articuloSeleccionado,
+                        tallaUiState = tallaUiState,
+                        onTallaEvent = onTallaEvent,
+                        onTiendaEvent = onTiendaEvent,
+                        filtro =filtro,
+                        estaFiltrando = estaFiltrando,
+                        onEstaFiltrandoChange = { onTiendaEvent(TiendaEvent.OnClickEstaFiltrando(it)) },
+                        onFiltroChange ={ onTiendaEvent(TiendaEvent.OnFiltroChange(it)) },
+                        onClickFiltrar ={ onTiendaEvent(TiendaEvent.OnClickFiltrar(it)) },
+                        onClickQuitarFiltro = { onTiendaEvent(TiendaEvent.OnClickQuitarFiltro) }
                     )
-                    salirState = false
                 }
-                /*      scope.launch {
-                          delay(3000)
-                          salirState = true
-                      }*/
+
+                1 -> {
+                    Column {
+                        Text(text = "Aqui van tus articulos favoritos")
+                    }
+                }
+
+                2 -> {
+
+                    RuletaScreen(
+                        mostrarResultado = mostrarResultado,
+                        onObtenerResultadoRuleta = onObtenerResultadoRuleta,
+                        resultadoFinalRuleta = resultadoFinalRuleta,
+                        listaRuleta = listaRuleta,
+
+                        )
+                }
+
+                3 -> {
+                    Column {
+                        Text(text = "Aqui va el clicker")
+                    }
+                }
+
+                4 -> {
+                    Column {
+                        Text(text = "Aqui va el carrito")
+                    }
+                }
             }
 
+            /* if (!carrito) {
+                 Escaparate(
+                     articulos = articulos,
+                     articuloSeleccionado = articuloSeleccionado,
+                     tallaUiState = tallaUiState,
+                     onTallaEvent = onTallaEvent,
+                     onTiendaEvent = onTiendaEvent
+                 )
+             } else Carrito(pedido = pedido, onTiendaEvent = onTiendaEvent)*/
         }
 
     }

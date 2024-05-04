@@ -26,7 +26,7 @@ class ArticuloRepository @Inject constructor(private val proveedorArticulo: Arti
     }
 
     suspend fun get(filtro: String): List<Articulo>? = withContext(Dispatchers.IO) {
-        proveedorArticulo.get().filter { it.descripcion.contains(filtro)}?.toMutableList()?.toArticulos()
+        proveedorArticulo.get().filter { it.descripcion.contains(filtro) || it.tipo.contains(filtro)}?.toMutableList()?.toArticulos()
     }
 
     suspend fun get(ids: MutableList<Int>): List<Articulo>? =
