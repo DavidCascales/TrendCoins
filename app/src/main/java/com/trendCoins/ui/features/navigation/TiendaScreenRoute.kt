@@ -46,7 +46,8 @@ fun NavGraphBuilder.tiendaScreenRoute(
             listaRuleta = tiendaViewModel.resultadosRuleta,
             mostrarResultado = tiendaViewModel.verResultadoRuleta,
             onObtenerResultadoRuleta = {tiendaViewModel.onObtenerResultadoRuleta(it)},
-            resultadoFinalRuleta = {tiendaViewModel.resultadoFinalRuleta(it)}
+            resultadoFinalRuleta = {tiendaViewModel.resultadoFinalRuleta(it)},
+            sumaPuntosClicker={tiendaViewModel.sumaPuntosClicker()}
         )
     }
 }

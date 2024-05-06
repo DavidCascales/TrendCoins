@@ -1,8 +1,11 @@
 package com.pmdm.tienda.ui.features.tienda
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,10 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.pmdm.tienda.ui.features.tienda.components.BarraNavegacion
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
+import com.trendCoins.R
 import com.trendCoins.models.Cliente
 
 
@@ -47,7 +54,8 @@ fun TiendaScreen(
     mostrarResultado: Boolean,
     onObtenerResultadoRuleta: (Int) -> Int,
     listaRuleta: List<String>,
-    resultadoFinalRuleta: (Int) -> Unit
+    resultadoFinalRuleta: (Int) -> Unit,
+    sumaPuntosClicker:()->Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -130,6 +138,13 @@ fun TiendaScreen(
                 3 -> {
                     Column {
                         Text(text = "Aqui va el clicker")
+
+                        Spacer(modifier = Modifier.padding(20.dp))
+
+                        Image(painterResource(id = R.drawable.imgclicker),contentDescription = "Imagen clicker",
+                            modifier=Modifier.rotate(20f)
+                            .clickable{sumaPuntosClicker()}
+                        )
                     }
                 }
 

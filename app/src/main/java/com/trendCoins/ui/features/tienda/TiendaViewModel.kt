@@ -50,6 +50,11 @@ class TiendaViewModel @Inject constructor(
         screenState = indexScreen
     }
 
+    fun sumaPuntosClicker()
+    {
+        clienteState=clienteState.copy(puntos = getPuntosusuario()+1)
+    }
+
     fun getPuntosusuario(): Int {
         return clienteState.puntos
     }
