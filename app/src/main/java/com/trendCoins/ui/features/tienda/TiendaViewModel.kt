@@ -42,6 +42,7 @@ class TiendaViewModel @Inject constructor(
 
     var verResultadoRuleta by mutableStateOf(false)
 
+    var puntos by mutableStateOf(0)
     var clienteState by mutableStateOf(Cliente())
 
     var screenState by mutableStateOf(0)
@@ -122,6 +123,10 @@ class TiendaViewModel @Inject constructor(
 
     fun onTiendaEvent(tiendaEvent: TiendaEvent) {
         when (tiendaEvent) {
+
+            is TiendaEvent.OnClickSumaPuntosClicker -> {
+                puntos= puntos+1
+            }
             is TiendaEvent.OnClickArticulo -> {
                 if (articuloSeleccionadoState?.id == tiendaEvent.articulo.id) articuloSeleccionadoState =
                     null
@@ -254,6 +259,7 @@ class TiendaViewModel @Inject constructor(
             is TiendaEvent.OnClickSalir -> {
                 clearTienda()
             }
+
 
             else -> {}
         }

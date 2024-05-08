@@ -2,6 +2,8 @@ package com.pmdm.tienda.ui.features.tienda
 
 
 sealed interface TiendaEvent {
+
+    object OnClickSumaPuntosClicker : TiendaEvent
     data class OnClickArticulo(val articulo: ArticuloUiState) : TiendaEvent
     data class OnClickAñadirCesta(var articulo: ArticuloDePedidoUiState) : TiendaEvent
     data class OnFiltroChange(var filtro: String) : TiendaEvent

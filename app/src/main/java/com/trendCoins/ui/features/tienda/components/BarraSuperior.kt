@@ -212,6 +212,7 @@ fun BarraSuperiorBuena(
     onClickUsuario: (Int) -> Unit,
     onClickCompar: () -> Unit,
     onClickCasa: () -> Unit,
+    puntosClicker: Int
 ) {
     val opcionesMenuUsuario = listOf(
         "Editar datos",
@@ -288,7 +289,7 @@ fun BarraSuperiorBuena(
                     contentDescription = "Puntos"
                 )
 
-                Text(text = clienteUiState.puntos.toString())
+                Text(text = puntosClicker.toString())
 
             }
             /*

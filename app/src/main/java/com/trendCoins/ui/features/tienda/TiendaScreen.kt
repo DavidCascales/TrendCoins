@@ -55,7 +55,7 @@ fun TiendaScreen(
     onObtenerResultadoRuleta: (Int) -> Int,
     listaRuleta: List<String>,
     resultadoFinalRuleta: (Int) -> Unit,
-    sumaPuntosClicker:()->Unit
+    puntosClicker: Int
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -82,7 +82,8 @@ fun TiendaScreen(
                     }
                 },
                 onClickCompar = { onTiendaEvent(TiendaEvent.OnClickComprar) },
-                onClickCasa = { onTiendaEvent(TiendaEvent.OnClickQuitarFiltro) }
+                onClickCasa = { onTiendaEvent(TiendaEvent.OnClickQuitarFiltro) },
+                puntosClicker = puntosClicker,
             )
 
 
@@ -143,8 +144,8 @@ fun TiendaScreen(
 
                         Image(painterResource(id = R.drawable.imgclicker),contentDescription = "Imagen clicker",
                             modifier=Modifier.rotate(20f)
-                            .clickable{sumaPuntosClicker()}
-                        )
+                            .clickable{onTiendaEvent(TiendaEvent.OnClickSumaPuntosClicker)})
+
                     }
                 }
 
