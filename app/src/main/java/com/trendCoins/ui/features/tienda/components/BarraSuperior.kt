@@ -201,17 +201,8 @@ fun BarraSuperior(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BarraSuperiorBuena(
-    filtro: String,
-    estaFiltrando: Boolean,
-    totalCompra: Float,
-    carrito: Boolean,
     clienteUiState: Cliente,
-    onEstaFiltrandoChange: (Boolean) -> Unit,
-    onFiltroChange: (String) -> Unit,
-    onClickFiltrar: (String) -> Unit,
     onClickUsuario: (Int) -> Unit,
-    onClickCompar: () -> Unit,
-    onClickCasa: () -> Unit,
     puntosClicker: Int
 ) {
     val opcionesMenuUsuario = listOf(

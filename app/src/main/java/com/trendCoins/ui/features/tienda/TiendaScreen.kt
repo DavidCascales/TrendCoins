@@ -66,14 +66,7 @@ fun TiendaScreen(
     Scaffold(
         topBar = {
             BarraSuperiorBuena(
-                filtro = filtro,
-                estaFiltrando = estaFiltrando,
-                totalCompra = totalCompra,
-                carrito = carrito,
                 clienteUiState = clienteUiState,
-                onFiltroChange = { onTiendaEvent(TiendaEvent.OnFiltroChange(it)) },
-                onClickFiltrar = { onTiendaEvent(TiendaEvent.OnClickFiltrar(it)) },
-                onEstaFiltrandoChange = { onTiendaEvent(TiendaEvent.OnClickEstaFiltrando(it)) },
                 onClickUsuario = { opcion ->
                     if (opcion == 0) onNavigateToNewUser(clienteUiState.correo)
                     else {
@@ -81,8 +74,6 @@ fun TiendaScreen(
                         onTiendaEvent(TiendaEvent.OnClickSalir)
                     }
                 },
-                onClickCompar = { onTiendaEvent(TiendaEvent.OnClickComprar) },
-                onClickCasa = { onTiendaEvent(TiendaEvent.OnClickQuitarFiltro) },
                 puntosClicker = puntosClicker,
             )
 

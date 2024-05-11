@@ -104,6 +104,7 @@ class TiendaViewModel @Inject constructor(
         viewModelScope.launch {
             articulosState = getArticulos()
             clienteState = inicializaCliente(null)
+
         }
     }
 
@@ -125,7 +126,7 @@ class TiendaViewModel @Inject constructor(
         when (tiendaEvent) {
 
             is TiendaEvent.OnClickSumaPuntosClicker -> {
-                puntos= puntos+1
+                puntos += 1
             }
             is TiendaEvent.OnClickArticulo -> {
                 if (articuloSeleccionadoState?.id == tiendaEvent.articulo.id) articuloSeleccionadoState =
@@ -257,12 +258,20 @@ class TiendaViewModel @Inject constructor(
             }
 
             is TiendaEvent.OnClickSalir -> {
+                clienteState=clienteState.copy(puntos = puntos)
+                viewModelScope.launch {
+                    updateCliente()
+                }
                 clearTienda()
             }
 
 
             else -> {}
         }
+    }
+
+    suspend fun updateCliente() {
+        clienteRepository.update(clienteState)
     }
 
     suspend private fun getArticulos() =
@@ -369,10 +378,16 @@ class TiendaViewModel @Inject constructor(
                 c.ciudad,
                 c.puntos
             )
+            /*Mirar lo del update de los puntos*/
+            puntos= clienteState.puntos
+
 //            pedidoUiState = pedidoUiState.copy(dniCliente = c.dni)
             if (clienteState.deseados.size > 0) articulosState =
                 articulosState.checkFavoritos().toMutableStateList()
+
+
         }
+
     }
 
     fun clearTienda() {
