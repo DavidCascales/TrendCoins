@@ -13,6 +13,7 @@ import com.pmdm.tienda.ui.features.tienda.ArticuloUiState
 import com.pmdm.tienda.ui.features.tienda.PedidoUiState
 import com.pmdm.tienda.ui.features.tienda.TiendaEvent
 
+  /*
 @Composable
 fun Carrito(
     pedido: PedidoUiState,
@@ -37,3 +38,4 @@ fun Carrito(
         }
     }
 }
+  */

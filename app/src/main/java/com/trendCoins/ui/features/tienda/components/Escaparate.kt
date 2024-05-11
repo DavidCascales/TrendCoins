@@ -133,7 +133,7 @@ fun Escaparate(
                onDismissRequest = {
                    onTiendaEvent(TiendaEvent.OnDismissDialog)
                },
-               onClickTalla = onTallaEvent
+               onTiendaEvent = onTiendaEvent
            )
        }
    }

@@ -8,9 +8,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.trendCoins.data.ArticuloCarritoRepository
 import com.trendCoins.data.ClienteRepository
 import com.trendCoins.data.ArticuloRepository
 import com.trendCoins.models.Articulo
+import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TiendaViewModel @Inject constructor(
     private val articuloRepository: ArticuloRepository,
-    private val clienteRepository: ClienteRepository
+    private val clienteRepository: ClienteRepository,
+    private val articuloCarritoRepository: ArticuloCarritoRepository
 ) : ViewModel() {
 
     val resultadosRuleta by
@@ -39,14 +42,17 @@ class TiendaViewModel @Inject constructor(
             "0"
         )
     )
-
+    var totalCompra by mutableStateOf(0)
     var verResultadoRuleta by mutableStateOf(false)
-
+    var talla by mutableStateOf("")
     var puntos by mutableStateOf(0)
     var clienteState by mutableStateOf(Cliente())
-
+    var articuloCarritoState by mutableStateOf(ArticuloCarrito())
     var screenState by mutableStateOf(0)
 
+    fun getTotalCompra() {
+        totalCompra = listaArticuloCarrito?.map { a -> a.cantidad * a.precio }?.sum() ?: 0
+        }
     fun onChangeScreen(indexScreen: Int) {
         screenState = indexScreen
     }
@@ -90,7 +96,7 @@ class TiendaViewModel @Inject constructor(
     var estaFiltrandoState by mutableStateOf(false)
 
     var pedidoUiState by mutableStateOf(iniciarNuevoPedido())
-    var articulodDePedidoUiState: ArticuloDePedidoUiState by mutableStateOf(ArticuloDePedidoUiState())
+    var listaArticuloCarrito by mutableStateOf(mutableListOf<ArticuloCarrito>()?.toMutableStateList())
     var mostrarFavoritoState by mutableStateOf(false)
 
 
@@ -125,6 +131,11 @@ class TiendaViewModel @Inject constructor(
     fun onTiendaEvent(tiendaEvent: TiendaEvent) {
         when (tiendaEvent) {
 
+            is TiendaEvent.OnTallaChange->
+            {
+                talla = tiendaEvent.talla
+            }
+
             is TiendaEvent.OnClickSumaPuntosClicker -> {
                 puntos += 1
             }
@@ -139,22 +150,22 @@ class TiendaViewModel @Inject constructor(
             }
 
             is TiendaEvent.OnClickAñadirCesta -> {
-                articulodDePedidoUiState = tiendaEvent.articulo
-                if (articulodDePedidoUiState != null) {
-                    var seleccion: TipoTalla = TipoTalla.NOTALLA
+                articuloCarritoState = tiendaEvent.articulo.toArticuloCarrito()
+                if (articuloCarritoState != null) {
+                    //var seleccion: TipoTalla = TipoTalla.NOTALLA
 
-                    for (t in tallaUiState.tallaSeleccionada) if (t.value) seleccion = t.key
-                    if (seleccion != TipoTalla.NOTALLA) {
-                        articulodDePedidoUiState =
-                            articulodDePedidoUiState.copy(tamaño = seleccion.ordinal.toShort())
-                        val articuloAux = buscaArticuloEnPedido(articulodDePedidoUiState)
+
+                    if (talla != "") {
+                        articuloCarritoState =
+                            articuloCarritoState.copy(talla = talla)
+                        val articuloAux = buscaArticuloEnCarrito(articuloCarritoState)
                         if (articuloAux != null) {
-                            val posicion = buscaPosicionArticuloPedido(articuloAux)
-                            pedidoUiState.articulos[posicion] =
-                                pedidoUiState.articulos[posicion].copy(
-                                    cantidad = articuloAux.cantidad + pedidoUiState.articulos[posicion].cantidad
+                            val posicion = buscaPosicionArticuloArticulo(articuloAux)
+                           listaArticuloCarrito!![posicion!!] =
+                                listaArticuloCarrito!![posicion].copy(
+                                    cantidad = articuloAux.cantidad + listaArticuloCarrito!![posicion]?.cantidad!!
                                 )
-                        } else pedidoUiState.articulos.add(articulodDePedidoUiState)
+                        } else listaArticuloCarrito?.add(articuloCarritoState)
 
                         actualizarCifrasPedido()
                         tallaUiState = inicializaTalla()
@@ -220,15 +231,15 @@ class TiendaViewModel @Inject constructor(
             }
 
             is TiendaEvent.OnClickMas -> {
-                val posicion = buscaPosicionArticuloPedido(tiendaEvent.articulo)
-                pedidoUiState.articulos[posicion] =
+                val posicion = buscaPosicionArticuloArticulo(tiendaEvent.articulo.toArticuloCarrito())
+                pedidoUiState.articulos[posicion!!] =
                     pedidoUiState.articulos[posicion].copy(cantidad = pedidoUiState.articulos[posicion].cantidad + 1)
                 actualizarCifrasPedido()
             }
 
             is TiendaEvent.OnClickMenos -> {
-                val posicion = buscaPosicionArticuloPedido(tiendaEvent.articulo)
-                if (pedidoUiState.articulos[posicion].cantidad - 1 > 0) {
+                val posicion = buscaPosicionArticuloArticulo(tiendaEvent.articulo.toArticuloCarrito())
+                if (pedidoUiState.articulos[posicion!!].cantidad - 1 > 0) {
                     pedidoUiState.articulos[posicion] =
                         pedidoUiState.articulos[posicion].copy(cantidad = pedidoUiState.articulos[posicion].cantidad - 1)
                 } else pedidoUiState.articulos.removeAt(posicion)
@@ -315,19 +326,19 @@ class TiendaViewModel @Inject constructor(
         return talla
     }
 
-    private fun buscaArticuloEnPedido(articulo: ArticuloDePedidoUiState): ArticuloDePedidoUiState? {
-        return pedidoUiState.articulos.find { a ->
-            a.articuloId == articulo.articuloId && a.tamaño == articulo.tamaño
+    private fun buscaArticuloEnCarrito(articulo: ArticuloCarrito): ArticuloCarrito? {
+        return listaArticuloCarrito?.find { a ->
+            a.descripcion == articulo.descripcion && a.talla == articulo.talla
         }
     }
 
-    private fun buscaPosicionArticuloPedido(articulo: ArticuloDePedidoUiState): Int {
-        return pedidoUiState.articulos.indexOf(articulo)
+    private fun buscaPosicionArticuloArticulo(articulo: ArticuloCarrito): Int? {
+        return listaArticuloCarrito?.indexOf(articulo)
     }
 
     private fun actualizarCifrasPedido() {
-        numeroArticulosState = pedidoUiState.articulos.map { a -> a.cantidad }.sum()
-        totalCompraState = pedidoUiState.articulos.map { a -> a.cantidad * a.precio }.sum()
+        numeroArticulosState = listaArticuloCarrito?.map { a -> a.cantidad }?.sum() ?: 0
+        totalCompra = listaArticuloCarrito?.map { a -> a.cantidad * a.precio }?.sum() ?: 0
     }
 
     suspend private fun getCliente(login: String) = clienteRepository.getClienteCorreo(login)
@@ -385,6 +396,7 @@ class TiendaViewModel @Inject constructor(
             if (clienteState.deseados.size > 0) articulosState =
                 articulosState.checkFavoritos().toMutableStateList()
 
+            listaArticuloCarrito= articuloCarritoRepository.get(clienteState.correo)?.toMutableStateList()
 
         }
 
@@ -401,7 +413,6 @@ class TiendaViewModel @Inject constructor(
             totalCompraState = 0f
             estaFiltrandoState = false
             articuloSeleccionadoState = null
-            articulodDePedidoUiState = ArticuloDePedidoUiState()
             mostrarFavoritoState = false
             articulosState = getArticulos()
         }
@@ -419,6 +430,8 @@ class TiendaViewModel @Inject constructor(
         }
         return listaChecked
     }
+    fun ArticuloUiState.toArticuloCarrito() =
+        ArticuloCarrito(this.id, correoCliente = clienteState.correo, this.descripcion, this.precio,1 , talla)
 
     private fun MutableList<Articulo>.toArticulosUiState() =
         this.map { it.toArticuloUiState() }.toMutableList()
@@ -443,8 +456,6 @@ class TiendaViewModel @Inject constructor(
         */
 
 }
-/*
-fun ArticuloUiState.toArticuloDePedioUiState() =
-    ArticuloDePedidoUiState(this.id, this.url, descripcion, 0, this.precio, 1)
 
-*/
+
+

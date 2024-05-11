@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.Shop
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -39,16 +48,18 @@ import com.pmdm.tienda.ui.features.tienda.ArticuloDePedidoUiState
 import com.pmdm.tienda.ui.features.tienda.ArticuloUiState
 import com.pmdm.tienda.ui.features.tienda.TallaEvent
 import com.pmdm.tienda.ui.features.tienda.TallaUiState
+import com.pmdm.tienda.ui.features.tienda.TiendaEvent
 import com.pmdm.tienda.ui.features.tienda.TipoTalla
+import com.trendCoins.models.ArticuloCarrito
 import kotlin.random.Random
 
 @Composable
 fun DialogoCompra(
     articulo: ArticuloUiState,
     talla: TallaUiState,
-    onClickAñadirCesta: (ArticuloDePedidoUiState) -> Unit,
+    onClickAñadirCesta: (ArticuloUiState) -> Unit,
     onDismissRequest: () -> Unit,
-    onClickTalla: (TallaEvent) -> Unit,
+    onTiendaEvent: (TiendaEvent) -> Unit
 ) {
 
     val contexto = LocalContext.current
@@ -63,7 +74,7 @@ fun DialogoCompra(
     var tallaSeleccionadaState by remember {
         mutableStateOf(false)
     }
-
+/*
     var contenido= mutableListOf(
         FilterChipGroupUiState(
             label = TipoTalla.PEQUEÑA.tipo,
@@ -91,7 +102,7 @@ fun DialogoCompra(
     )
 
     var contenidoAuxiliar =contenido.toMutableList()
-
+    */
     AlertDialog(
         modifier = Modifier.height(500.dp),
         onDismissRequest = onDismissRequest,
@@ -119,6 +130,19 @@ fun DialogoCompra(
                  )*/
 
                 Text("Elige la talla del vestido", color = Color.Black)
+
+
+                val sizes = listOf("S", "M", "L", "XL")
+                Row {
+                    sizes.forEach { size ->
+                        Button(onClick = { onTiendaEvent(TiendaEvent.OnTallaChange(size)) }) {
+                            Text(text = size)
+                        }
+                    }
+                }
+
+
+/*
                 LazyRow(
                     contentPadding = PaddingValues(all = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -138,6 +162,8 @@ fun DialogoCompra(
                     }
 
                 }
+
+                */
             }
 
         },
@@ -145,7 +171,7 @@ fun DialogoCompra(
             TextButton(
                 onClick = {
                     if (tallaSeleccionadaState) {
-                        //onClickAñadirCesta(articulo.toArticuloDePedioUiState())
+                        onClickAñadirCesta(articulo)
                         onDismissRequest()
 
                     } else

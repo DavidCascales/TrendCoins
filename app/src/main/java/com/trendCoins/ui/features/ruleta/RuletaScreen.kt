@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import com.commandiron.spin_wheel_compose.SpinWheel
 import com.commandiron.spin_wheel_compose.state.rememberSpinWheelState
 import com.pmdm.tienda.ui.features.tienda.components.BarraNavegacion
-import com.pmdm.tienda.ui.features.tienda.components.Carrito
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
 import com.trendCoins.models.Cliente

@@ -15,6 +15,8 @@ class ArticuloCarritoRepository @Inject constructor(private val proveedorcarrito
         proveedorcarrito.get(login).toMutableList().toArticuloCarrito()
     }
 
+    suspend fun delete(login: String) = withContext(Dispatchers.IO) { proveedorcarrito.delete(login) }
+
     suspend fun insert(articulocarrito: ArticuloCarrito) =
         withContext(Dispatchers.IO) { proveedorcarrito.insert(articulocarrito.toArticuloCarritoEntity()) }
 
