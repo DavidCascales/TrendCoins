@@ -46,9 +46,15 @@ class TiendaViewModel @Inject constructor(
     var verResultadoRuleta by mutableStateOf(false)
     var talla by mutableStateOf("")
     var puntos by mutableStateOf(0)
+
     var clienteState by mutableStateOf(Cliente())
+
     var articuloCarritoState by mutableStateOf(ArticuloCarrito())
     var screenState by mutableStateOf(0)
+
+    var sesionIniciada by mutableStateOf(false)
+
+
 
     fun getTotalCompra() {
         totalCompra = listaArticuloCarrito?.map { a -> a.cantidad * a.precio }?.sum() ?: 0
@@ -57,9 +63,15 @@ class TiendaViewModel @Inject constructor(
         screenState = indexScreen
     }
 
+
+
     fun sumaPuntosClicker()
     {
-        clienteState=clienteState.copy(puntos = getPuntosusuario()+1)
+        viewModelScope.launch {
+            clienteState=clienteState.copy(puntos = clienteState.puntos+1)
+            clienteRepository.update(clienteState)
+        }
+
     }
 
     fun getPuntosusuario(): Int {
@@ -137,7 +149,8 @@ class TiendaViewModel @Inject constructor(
             }
 
             is TiendaEvent.OnClickSumaPuntosClicker -> {
-                puntos += 1
+                clienteState=clienteState.copy(puntos = clienteState.puntos+1)
+
             }
             is TiendaEvent.OnClickArticulo -> {
                 if (articuloSeleccionadoState?.id == tiendaEvent.articulo.id) articuloSeleccionadoState =
@@ -269,11 +282,14 @@ class TiendaViewModel @Inject constructor(
             }
 
             is TiendaEvent.OnClickSalir -> {
-                clienteState=clienteState.copy(puntos = puntos)
+
+                //clienteState=clienteState.copy(puntos = puntos)
+                sesionIniciada=false
                 viewModelScope.launch {
                     updateCliente()
+                    clearTienda()
                 }
-                clearTienda()
+
             }
 
 
@@ -376,6 +392,8 @@ class TiendaViewModel @Inject constructor(
     }
 
     fun actualizaCliente(correo: String) {
+
+        sesionIniciada=true
         viewModelScope.launch {
             val c = clienteRepository.getClienteCorreo(correo)
             clienteState = Cliente(

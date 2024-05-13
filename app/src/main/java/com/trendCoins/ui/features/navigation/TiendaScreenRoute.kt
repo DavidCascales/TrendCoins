@@ -23,7 +23,7 @@ fun NavGraphBuilder.tiendaScreenRoute(
     composable(TiendaRoute) {
         val correo = it.arguments?.getString("correo")
        requireNotNull(correo)
-       if(correo!=null) tiendaViewModel.actualizaCliente(correo)
+       if(correo!=null && tiendaViewModel.sesionIniciada==false) tiendaViewModel.actualizaCliente(correo)
         TiendaScreen(
             clienteUiState = tiendaViewModel.clienteState!!,
             articulos = tiendaViewModel.articulosState?.toList()!!,
@@ -46,8 +46,8 @@ fun NavGraphBuilder.tiendaScreenRoute(
             listaRuleta = tiendaViewModel.resultadosRuleta,
             mostrarResultado = tiendaViewModel.verResultadoRuleta,
             onObtenerResultadoRuleta = {tiendaViewModel.onObtenerResultadoRuleta(it)},
-            resultadoFinalRuleta = {tiendaViewModel.resultadoFinalRuleta(it)},
-            puntosClicker = tiendaViewModel.puntos
+            resultadoFinalRuleta = {tiendaViewModel.resultadoFinalRuleta(it)}
+
         )
     }
 }

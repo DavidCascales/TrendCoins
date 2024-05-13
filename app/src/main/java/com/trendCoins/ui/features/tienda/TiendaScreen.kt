@@ -54,8 +54,7 @@ fun TiendaScreen(
     mostrarResultado: Boolean,
     onObtenerResultadoRuleta: (Int) -> Int,
     listaRuleta: List<String>,
-    resultadoFinalRuleta: (Int) -> Unit,
-    puntosClicker: Int
+    resultadoFinalRuleta: (Int) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -74,7 +73,7 @@ fun TiendaScreen(
                         onTiendaEvent(TiendaEvent.OnClickSalir)
                     }
                 },
-                puntosClicker = puntosClicker,
+                puntosClicker = clienteUiState.puntos,
             )
 
 
