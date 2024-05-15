@@ -41,7 +41,7 @@ fun LoginScreen(
 //    var mensaje by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
-    var recordarmeState by remember { mutableStateOf(false) }
+
 
     Box() {
         Column(
@@ -59,14 +59,14 @@ fun LoginScreen(
                 passwordState = usuarioUiState.contraseña,
                 validacionLogin = validacionLoginUiState.validacionLogin,
                 validacionPassword = validacionLoginUiState.validacionPassword,
-                recordarmeState = recordarmeState,
+
                 onValueChangeLogin = {
                     onLoginEvent(LoginEvent.LoginChanged(it))
                 },
                 onValueChangePassword = {
                     onLoginEvent(LoginEvent.PasswordChanged(it))
                 },
-                onCheckedChanged = { recordarmeState = it },
+
                 onClickLogearse = {
                     onLoginEvent(LoginEvent.OnClickLogearse(onNavigateToTienda))
                     onMostrarSnackBar()

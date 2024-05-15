@@ -20,10 +20,8 @@ fun UsuarioPassword(
     validacionLogin: Validacion,
     passwordState: String,
     validacionPassword: Validacion,
-    recordarmeState: Boolean,
     onValueChangeLogin: (String) -> Unit,
     onValueChangePassword: (String) -> Unit,
-    onCheckedChanged: (Boolean) -> Unit,
     onClickLogearse: () -> Unit
 ) {
     Column {
@@ -43,11 +41,7 @@ fun UsuarioPassword(
             onValueChange = onValueChangePassword
         )
 
-        CheckboxWithText(
-            label = "Recordarme",
-            checkedState = recordarmeState,
-            onCheckedChange = onCheckedChanged
-        )
+
 
         Button(
             onClick = onClickLogearse,
@@ -75,10 +69,8 @@ fun UsuarioPasswordTest() {
             validacionLogin = object : Validacion {},
             passwordState = passwordState,
             validacionPassword = object : Validacion {},
-            recordarmeState = recordarme,
             onValueChangeLogin = { loginState = it },
             onValueChangePassword = { passwordState = it },
-            onCheckedChanged = { recordarme = !it },
             onClickLogearse = {}
         )
     }
