@@ -44,6 +44,7 @@ class TiendaViewModel @Inject constructor(
     )
     var totalCompra by mutableStateOf(0)
     var verResultadoRuleta by mutableStateOf(false)
+    var puntosRuleta by mutableStateOf(0)
     var talla by mutableStateOf("")
     var puntos by mutableStateOf(0)
 
@@ -78,11 +79,9 @@ class TiendaViewModel @Inject constructor(
         return clienteState.puntos
     }
 
-    val onMostrarSnackBar: () -> Unit by mutableStateOf({
-        verResultadoRuleta = !verResultadoRuleta
-    })
 
-    fun resultadoFinalRuleta(puntos: Int) {
+
+    /*fun resultadoFinalRuleta(puntos: Int) {
         onMostrarSnackBar
         sumaPuntos(onObtenerResultadoRuleta(puntos))
         viewModelScope.launch {
@@ -90,13 +89,13 @@ class TiendaViewModel @Inject constructor(
             onMostrarSnackBar()
         }
 
-    }
+    }*/
 
-    fun sumaPuntos(puntos: Int) {
-        clienteState = clienteState.copy(puntos = getPuntosusuario() + puntos)
-    }
+//    fun sumaPuntos(puntos: Int) {
+//        clienteState = clienteState.copy(puntos = getPuntosusuario() + puntos)
+//    }
 
-    fun onObtenerResultadoRuleta(resultado: Int): Int {
+    fun ObtenerResultadoRuleta(resultado: Int): Int {
         return resultadosRuleta[resultado].toInt()
 
     }
@@ -126,7 +125,7 @@ class TiendaViewModel @Inject constructor(
         }
     }
 
-    fun onTallaEvent(tallaEvent: TallaEvent) {
+   /* fun onTallaEvent(tallaEvent: TallaEvent) {
 
         when (tallaEvent) {
             is TallaEvent.OnClickPequeña -> tallaUiState = inicializaTalla(TipoTalla.PEQUEÑA)
@@ -138,7 +137,7 @@ class TiendaViewModel @Inject constructor(
             is TallaEvent.OnClickXGrande -> tallaUiState = inicializaTalla(TipoTalla.XGRANDE)
             else -> {}
         }
-    }
+    }*/
 
     fun onTiendaEvent(tiendaEvent: TiendaEvent) {
         when (tiendaEvent) {
@@ -152,6 +151,19 @@ class TiendaViewModel @Inject constructor(
                 clienteState=clienteState.copy(puntos = clienteState.puntos+1)
 
             }
+            is TiendaEvent.onClickPuntosRuleta->{
+
+                verResultadoRuleta=true
+                puntosRuleta=ObtenerResultadoRuleta(tiendaEvent.indicePuntos)
+                clienteState=clienteState.copy(puntos = clienteState.puntos+puntosRuleta)
+
+
+            }
+            is TiendaEvent.OnchangeResultadoRuleta->{
+                verResultadoRuleta=false
+            }
+
+
             is TiendaEvent.OnClickArticulo -> {
                 if (articuloSeleccionadoState?.id == tiendaEvent.articulo.id) articuloSeleccionadoState =
                     null

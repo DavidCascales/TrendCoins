@@ -44,17 +44,15 @@ fun TiendaScreen(
     totalCompra: Float,
     pedido: PedidoUiState,
     tallaUiState: TallaUiState,
-    onTallaEvent: (TallaEvent) -> Unit,
     onTiendaEvent: (TiendaEvent) -> Unit,
     onNavigateToPedido: (String) -> Unit,
     onNavigateToNewUser: (String) -> Unit,
     onNavigateToLogin: () -> Unit,
     screenState: Int,
     onScreenChange: (Int) -> Unit,
-    mostrarResultado: Boolean,
-    onObtenerResultadoRuleta: (Int) -> Int,
     listaRuleta: List<String>,
-    resultadoFinalRuleta: (Int) -> Unit
+    puntosRuleta: Int,
+    verResultadoRuleta: Boolean
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -98,7 +96,6 @@ fun TiendaScreen(
                         articulos = articulos,
                         articuloSeleccionado = articuloSeleccionado,
                         tallaUiState = tallaUiState,
-                        onTallaEvent = onTallaEvent,
                         onTiendaEvent = onTiendaEvent,
                         filtro =filtro,
                         estaFiltrando = estaFiltrando,
@@ -118,11 +115,11 @@ fun TiendaScreen(
                 2 -> {
 
                     RuletaScreen(
-                        mostrarResultado = mostrarResultado,
-                        onObtenerResultadoRuleta = onObtenerResultadoRuleta,
-                        resultadoFinalRuleta = resultadoFinalRuleta,
-                        listaRuleta = listaRuleta,
 
+                        onTiendaEvent = onTiendaEvent,
+                        listaRuleta = listaRuleta,
+                        puntosRuleta = puntosRuleta,
+                        verResultadoRuleta = verResultadoRuleta
                         )
                 }
 

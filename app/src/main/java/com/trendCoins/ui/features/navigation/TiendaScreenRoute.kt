@@ -37,16 +37,14 @@ fun NavGraphBuilder.tiendaScreenRoute(
             totalCompra = tiendaViewModel.totalCompraState,
             onTiendaEvent = tiendaViewModel::onTiendaEvent,
             pedido = tiendaViewModel.pedidoUiState,
-            onTallaEvent = tiendaViewModel::onTallaEvent,
             onNavigateToPedido = onNavigateToPedido,
             onNavigateToNewUser = onNavigateToNewUser,
             onNavigateToLogin = onNavigateToLogin,
             screenState=tiendaViewModel.screenState,
             onScreenChange={ it -> tiendaViewModel.onChangeScreen(it)},
             listaRuleta = tiendaViewModel.resultadosRuleta,
-            mostrarResultado = tiendaViewModel.verResultadoRuleta,
-            onObtenerResultadoRuleta = {tiendaViewModel.onObtenerResultadoRuleta(it)},
-            resultadoFinalRuleta = {tiendaViewModel.resultadoFinalRuleta(it)}
+            verResultadoRuleta = tiendaViewModel.verResultadoRuleta,
+            puntosRuleta = tiendaViewModel.puntosRuleta
 
         )
     }

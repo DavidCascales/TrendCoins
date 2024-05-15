@@ -40,7 +40,6 @@ fun Escaparate(
     articulos: List<ArticuloUiState>,
     articuloSeleccionado: ArticuloUiState?,
     tallaUiState: TallaUiState,
-    onTallaEvent: (TallaEvent) -> Unit,
     onTiendaEvent: (TiendaEvent) -> Unit,
     filtro: String,
     estaFiltrando: Boolean,

@@ -6,12 +6,14 @@ import com.trendCoins.models.ArticuloCarrito
 sealed interface TiendaEvent {
 
     object OnClickSumaPuntosClicker : TiendaEvent
+    data class onClickPuntosRuleta(var indicePuntos: Int) : TiendaEvent
+    object OnchangeResultadoRuleta : TiendaEvent
     data class OnClickArticulo(val articulo: ArticuloUiState) : TiendaEvent
     data class OnClickAñadirCesta(var articulo: ArticuloUiState) : TiendaEvent
     data class OnFiltroChange(var filtro: String) : TiendaEvent
     data class OnTallaChange(var talla: String) : TiendaEvent
     data class OnClickFiltrar(var filtro: String) : TiendaEvent
-    data class OnClickFavorito(var articulo:ArticuloUiState) : TiendaEvent
+    data class OnClickFavorito(var articulo: ArticuloUiState) : TiendaEvent
     data class OnClickEstaFiltrando(var estaFiltrando: Boolean) : TiendaEvent
     data class OnClickMas(var articulo: ArticuloUiState) : TiendaEvent
     data class OnClickMenos(var articulo: ArticuloUiState) : TiendaEvent
@@ -19,6 +21,6 @@ sealed interface TiendaEvent {
     object OnClickQuitarFiltro : TiendaEvent
     object OnClickListarFavoritos : TiendaEvent
     object OnClickCarrito : TiendaEvent
-    object OnClickComprar: TiendaEvent
-    object OnClickSalir:TiendaEvent
+    object OnClickComprar : TiendaEvent
+    object OnClickSalir : TiendaEvent
 }
