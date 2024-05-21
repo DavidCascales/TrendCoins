@@ -27,6 +27,7 @@ fun NavGraphBuilder.tiendaScreenRoute(
         TiendaScreen(
             clienteUiState = tiendaViewModel.clienteState!!,
             articulos = tiendaViewModel.articulosState?.toList()!!,
+            deseados=tiendaViewModel.articulosFavoritosState.toList()!!,
             muestraFavoritos = tiendaViewModel.mostrarFavoritoState,
             articuloSeleccionado = tiendaViewModel.articuloSeleccionadoState,
             filtro = tiendaViewModel.filtroState,

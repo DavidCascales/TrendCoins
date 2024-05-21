@@ -112,6 +112,7 @@ class TiendaViewModel @Inject constructor(
 
 
     var articulosState by mutableStateOf(mutableListOf<ArticuloUiState>().toMutableStateList())
+    var articulosFavoritosState by mutableStateOf(mutableListOf<ArticuloUiState>().toMutableStateList())
 
     var tallaUiState: TallaUiState by mutableStateOf(inicializaTalla())
     var articuloSeleccionadoState: ArticuloUiState? by mutableStateOf(null)
@@ -241,15 +242,7 @@ class TiendaViewModel @Inject constructor(
 
             }
 
-            is TiendaEvent.OnClickListarFavoritos -> {
-                viewModelScope.launch {
-                    mostrarFavoritoState = !mostrarFavoritoState
-                    if (mostrarFavoritoState)
-                        articulosState = getArticulosFavoritos().toMutableStateList()
-                    else articulosState = getArticulos()
-                    carritoState = false
-                }
-            }
+
 
             is TiendaEvent.OnClickCarrito -> {
                 if (carritoState == false) carritoState = true
@@ -322,20 +315,16 @@ class TiendaViewModel @Inject constructor(
         articuloRepository.get(filtro)?.toMutableList()?.toArticulosUiState()?.checkFavoritos()
             ?.toMutableStateList()
 
-    /*suspend private fun getArticulosFavoritos(): MutableList<ArticuloUiState>? {
-        return articuloRepository.get(clienteState.deseados)?.toMutableList()?.toArticulosUiState()
-            ?.checkFavoritos()
-    }*/
+
     suspend private fun getArticulosFavoritos(): MutableList<ArticuloUiState> {
         val lista = clienteRepository.getClienteCorreo(clienteState.correo).deseados
-        return getArticulos().filter { lista.contains(it.id) }.toMutableList()
+        return getArticulos().filter { lista.contains(it.id) }.toMutableList().checkFavoritos()
     }
 
     suspend private fun actualizaFavoritos() {
         clienteRepository.actualizaFavoritos(clienteState.correo, clienteState.deseados)
         // clienteState = clienteRepository.get(clienteState.correo)
-        articulosState =
-            if (mostrarFavoritoState) getArticulosFavoritos().toMutableStateList() else getArticulos()
+        articulosFavoritosState = getArticulosFavoritos().toMutableStateList()
 
     }
 
@@ -423,8 +412,14 @@ class TiendaViewModel @Inject constructor(
             puntos= clienteState.puntos
 
 //            pedidoUiState = pedidoUiState.copy(dniCliente = c.dni)
-            if (clienteState.deseados.size > 0) articulosState =
-                articulosState.checkFavoritos().toMutableStateList()
+            if (clienteState.deseados.size > 0)
+            {
+                articulosState =
+                    articulosState.checkFavoritos().toMutableStateList()
+
+                articulosFavoritosState= checkSoloFavoritos().toMutableStateList()
+
+            }
 
             listaArticuloCarrito= articuloCarritoRepository.get(clienteState.correo)?.toMutableStateList()
 
@@ -457,6 +452,17 @@ class TiendaViewModel @Inject constructor(
                 )
             )
             else listaChecked.add(it)
+        }
+        return listaChecked
+    }
+    private fun checkSoloFavoritos(): MutableList<ArticuloUiState> {
+        var listaChecked = mutableListOf<ArticuloUiState>()
+        articulosState.forEach {
+            if (clienteState != null && clienteState?.deseados?.contains(it.id)!!) listaChecked.add(
+                ArticuloUiState(
+                    it.id, it.imagen, it.descripcion, it.precio, it.tipo, true
+                )
+            )
         }
         return listaChecked
     }

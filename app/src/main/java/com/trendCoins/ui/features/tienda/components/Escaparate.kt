@@ -130,7 +130,7 @@ fun Escaparate(
 
                    onTiendaEvent(TiendaEvent.OnClickAñadirCesta(it))
                },
-               talla = tallaUiState,
+               //talla = tallaUiState,
                onDismissRequest = {
                    onTiendaEvent(TiendaEvent.OnDismissDialog)
                },

@@ -56,7 +56,7 @@ import kotlin.random.Random
 @Composable
 fun DialogoCompra(
     articulo: ArticuloUiState,
-    talla: TallaUiState,
+    //talla: TallaUiState,
     onClickAñadirCesta: (ArticuloUiState) -> Unit,
     onDismissRequest: () -> Unit,
     onTiendaEvent: (TiendaEvent) -> Unit

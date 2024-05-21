@@ -28,6 +28,7 @@ import com.pmdm.tienda.ui.features.tienda.components.Escaparate
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
 import com.trendCoins.R
 import com.trendCoins.models.Cliente
+import com.trendCoins.ui.features.tienda.components.DeseadosScreen
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -52,7 +53,8 @@ fun TiendaScreen(
     onScreenChange: (Int) -> Unit,
     listaRuleta: List<String>,
     puntosRuleta: Int,
-    verResultadoRuleta: Boolean
+    verResultadoRuleta: Boolean,
+    deseados: List<ArticuloUiState>
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -107,9 +109,15 @@ fun TiendaScreen(
                 }
 
                 1 -> {
-                    Column {
-                        Text(text = "Aqui van tus articulos favoritos")
-                    }
+
+                       DeseadosScreen(
+                           deseados = deseados,
+                           articuloSeleccionado = articuloSeleccionado,
+                           onTiendaEvent = onTiendaEvent
+                          )
+
+
+
                 }
 
                 2 -> {
@@ -130,8 +138,9 @@ fun TiendaScreen(
                         Spacer(modifier = Modifier.padding(20.dp))
 
                         Image(painterResource(id = R.drawable.imgclicker),contentDescription = "Imagen clicker",
-                            modifier=Modifier.rotate(20f)
-                            .clickable{onTiendaEvent(TiendaEvent.OnClickSumaPuntosClicker)})
+                            modifier= Modifier
+                                .rotate(20f)
+                                .clickable { onTiendaEvent(TiendaEvent.OnClickSumaPuntosClicker) })
 
                     }
                 }

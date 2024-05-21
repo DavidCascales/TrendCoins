@@ -19,7 +19,6 @@ sealed interface TiendaEvent {
     data class OnClickMenos(var articulo: ArticuloUiState) : TiendaEvent
     object OnDismissDialog : TiendaEvent
     object OnClickQuitarFiltro : TiendaEvent
-    object OnClickListarFavoritos : TiendaEvent
     object OnClickCarrito : TiendaEvent
     object OnClickComprar : TiendaEvent
     object OnClickSalir : TiendaEvent
