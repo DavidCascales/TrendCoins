@@ -37,8 +37,6 @@ fun NavGraphBuilder.tiendaScreenRoute(
             numerArticulos = tiendaViewModel.numeroArticulosState,
             totalCompra = tiendaViewModel.totalCompraState,
             onTiendaEvent = tiendaViewModel::onTiendaEvent,
-            pedido = tiendaViewModel.pedidoUiState,
-            onNavigateToPedido = onNavigateToPedido,
             onNavigateToNewUser = onNavigateToNewUser,
             onNavigateToLogin = onNavigateToLogin,
             screenState=tiendaViewModel.screenState,

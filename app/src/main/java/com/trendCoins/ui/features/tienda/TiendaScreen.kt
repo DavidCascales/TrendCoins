@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -18,11 +19,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pmdm.tienda.ui.features.tienda.components.BarraNavegacion
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
@@ -43,10 +50,8 @@ fun TiendaScreen(
     carrito: Boolean,
     numerArticulos: Int,
     totalCompra: Float,
-    pedido: PedidoUiState,
     tallaUiState: TallaUiState,
     onTiendaEvent: (TiendaEvent) -> Unit,
-    onNavigateToPedido: (String) -> Unit,
     onNavigateToNewUser: (String) -> Unit,
     onNavigateToLogin: () -> Unit,
     screenState: Int,
@@ -99,23 +104,22 @@ fun TiendaScreen(
                         articuloSeleccionado = articuloSeleccionado,
                         tallaUiState = tallaUiState,
                         onTiendaEvent = onTiendaEvent,
-                        filtro =filtro,
+                        filtro = filtro,
                         estaFiltrando = estaFiltrando,
                         onEstaFiltrandoChange = { onTiendaEvent(TiendaEvent.OnClickEstaFiltrando(it)) },
-                        onFiltroChange ={ onTiendaEvent(TiendaEvent.OnFiltroChange(it)) },
-                        onClickFiltrar ={ onTiendaEvent(TiendaEvent.OnClickFiltrar(it)) },
+                        onFiltroChange = { onTiendaEvent(TiendaEvent.OnFiltroChange(it)) },
+                        onClickFiltrar = { onTiendaEvent(TiendaEvent.OnClickFiltrar(it)) },
                         onClickQuitarFiltro = { onTiendaEvent(TiendaEvent.OnClickQuitarFiltro) }
                     )
                 }
 
                 1 -> {
 
-                       DeseadosScreen(
-                           deseados = deseados,
-                           articuloSeleccionado = articuloSeleccionado,
-                           onTiendaEvent = onTiendaEvent
-                          )
-
+                    DeseadosScreen(
+                        deseados = deseados,
+                        articuloSeleccionado = articuloSeleccionado,
+                        onTiendaEvent = onTiendaEvent
+                    )
 
 
                 }
@@ -128,20 +132,37 @@ fun TiendaScreen(
                         listaRuleta = listaRuleta,
                         puntosRuleta = puntosRuleta,
                         verResultadoRuleta = verResultadoRuleta
-                        )
+                    )
                 }
 
                 3 -> {
-                    Column {
-                        Text(text = "Aqui va el clicker")
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(modifier = Modifier.padding(20.dp))
+                            Text(
+                                text = "Clicker Coins",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 60.sp,
+                                color = Color(0xFFFFA500)
+                            )
 
-                        Spacer(modifier = Modifier.padding(20.dp))
+                        }
 
-                        Image(painterResource(id = R.drawable.imgclicker),contentDescription = "Imagen clicker",
-                            modifier= Modifier
-                                .rotate(20f)
-                                .clickable { onTiendaEvent(TiendaEvent.OnClickSumaPuntosClicker) })
+                        Spacer(modifier = Modifier.padding(40.dp))
 
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(painterResource(id = R.drawable.imgclicker),
+                                contentDescription = "Imagen clicker",
+                                modifier = Modifier
+                                    .rotate(20f)
+                                    .clickable { onTiendaEvent(TiendaEvent.OnClickSumaPuntosClicker) })
+                        }
                     }
                 }
 

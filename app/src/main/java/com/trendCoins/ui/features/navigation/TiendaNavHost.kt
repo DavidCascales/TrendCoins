@@ -59,6 +59,7 @@ fun TiendaNavHost() {
             },
             onNavigateToNewUser = {
                 newUserViewModel.esNuevoCliente=false
+                tiendaViewModel.sesionIniciada=false
                 newUserViewModel.inicializarCliente(tiendaViewModel.clienteState!!)
                 navController.navigateToNewUser()
             },
