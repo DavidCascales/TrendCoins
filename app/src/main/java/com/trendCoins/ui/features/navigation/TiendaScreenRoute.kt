@@ -14,20 +14,22 @@ const val TiendaRoute = "tienda/{correo}"
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.tiendaScreenRoute(
     tiendaViewModel: TiendaViewModel,
-    onNavigateToPedido: (dni:String)->Unit,
-    onNavigateToNewUser:(login:String)->Unit,
-    onNavigateToLogin:()->Unit
+    onNavigateToPedido: (dni: String) -> Unit,
+    onNavigateToNewUser: (login: String) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
 
 
     composable(TiendaRoute) {
         val correo = it.arguments?.getString("correo")
-       requireNotNull(correo)
-       if(correo!=null && tiendaViewModel.sesionIniciada==false) tiendaViewModel.actualizaCliente(correo)
+        requireNotNull(correo)
+        if (correo != null && tiendaViewModel.sesionIniciada == false) tiendaViewModel.actualizaCliente(
+            correo
+        )
         TiendaScreen(
             clienteUiState = tiendaViewModel.clienteState!!,
             articulos = tiendaViewModel.articulosState?.toList()!!,
-            deseados=tiendaViewModel.articulosFavoritosState.toList()!!,
+            deseados = tiendaViewModel.articulosFavoritosState.toList()!!,
             muestraFavoritos = tiendaViewModel.mostrarFavoritoState,
             articuloSeleccionado = tiendaViewModel.articuloSeleccionadoState,
             filtro = tiendaViewModel.filtroState,
@@ -35,17 +37,19 @@ fun NavGraphBuilder.tiendaScreenRoute(
             tallaUiState = tiendaViewModel.tallaUiState,
             carrito = tiendaViewModel.carritoState,
             numerArticulos = tiendaViewModel.numeroArticulosState,
-            totalCompra = tiendaViewModel.totalCompraState,
+            totalCompra = tiendaViewModel.totalCompra,
             onTiendaEvent = tiendaViewModel::onTiendaEvent,
             onNavigateToNewUser = onNavigateToNewUser,
             onNavigateToLogin = onNavigateToLogin,
-            screenState=tiendaViewModel.screenState,
-            onScreenChange={ it -> tiendaViewModel.onChangeScreen(it)},
+            screenState = tiendaViewModel.screenState,
+            onScreenChange = { it -> tiendaViewModel.onChangeScreen(it) },
             listaRuleta = tiendaViewModel.resultadosRuleta,
             verResultadoRuleta = tiendaViewModel.verResultadoRuleta,
-            puntosRuleta = tiendaViewModel.puntosRuleta
+            puntosRuleta = tiendaViewModel.puntosRuleta,
+            listaArticuloCarrito = tiendaViewModel.listaArticuloCarrito?.toList()!!,
+            mostrarCarrito = tiendaViewModel.mostrarCarrito
 
-        )
+            )
     }
 }
 

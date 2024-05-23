@@ -139,46 +139,4 @@ fun Escaparate(
        }
    }
 
-
-
-   /* LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
-        contentPadding = PaddingValues(all = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        items(items = articulos,
-            key = { it.id }) { item ->
-            var favorito by remember {
-                mutableStateOf(item.favorito)
-            }
-            CardArticulo(
-                articulo = item,
-                favorito = favorito,
-                modifier = Modifier.size(150.dp),
-                onClickFavorito = {
-                    onTiendaEvent(TiendaEvent.OnClickFavorito(item))
-                    favorito = it
-                },
-                onClickArticulo = {
-                    onTiendaEvent(TiendaEvent.OnClickArticulo(it))
-                }
-            )
-        }
-    }
-    if (articuloSeleccionado != null) {
-        DialogoCompra(
-            articulo = articuloSeleccionado,
-            onClickAñadirCesta = {
-
-                onTiendaEvent(TiendaEvent.OnClickAñadirCesta(it))
-            },
-            talla = tallaUiState,
-            onDismissRequest = {
-                onTiendaEvent(TiendaEvent.OnDismissDialog)
-            },
-            onClickTalla = onTallaEvent
-        )
-    }*/
-
 }

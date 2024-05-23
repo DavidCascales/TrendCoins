@@ -17,10 +17,12 @@ class ArticuloCarritoRepository @Inject constructor(private val proveedorcarrito
 
     suspend fun delete(login: String) = withContext(Dispatchers.IO) { proveedorcarrito.delete(login) }
 
+
     suspend fun insert(articulocarrito: ArticuloCarrito) =
         withContext(Dispatchers.IO) { proveedorcarrito.insert(articulocarrito.toArticuloCarritoEntity()) }
 
     suspend fun update(articuloCarrito: ArticuloCarrito) =
         withContext(Dispatchers.IO) { proveedorcarrito.update(articuloCarrito.toArticuloCarritoEntity()) }
 
+    suspend fun deleteArticulo(login: String, descripcion: String, talla: String) =  withContext(Dispatchers.IO) { proveedorcarrito.deleteArticulo(login,descripcion, talla) }
 }

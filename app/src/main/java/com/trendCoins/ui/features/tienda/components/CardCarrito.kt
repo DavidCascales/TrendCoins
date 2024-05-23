@@ -38,13 +38,14 @@ import androidx.compose.ui.unit.sp
 import com.pmdm.tienda.ui.features.tienda.ArticuloDePedidoUiState
 import com.pmdm.tienda.ui.features.tienda.ArticuloUiState
 import com.pmdm.tienda.ui.features.tienda.TipoTalla
+import com.trendCoins.models.ArticuloCarrito
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardCarrito(
     modifier: Modifier = Modifier,
-    articulo: ArticuloDePedidoUiState,
+    articulo: ArticuloCarrito,
     onClickMas: () -> Unit,
     onClickMenos: () -> Unit
 ) {
@@ -60,20 +61,6 @@ fun CardCarrito(
                 .wrapContentSize()
                 .padding(10.dp),
         ) {
-            val imageResource =
-                contexto.resources.getIdentifier("@drawable/${articulo.url}", null, contexto.packageName)
-
-            Image(
-                modifier = modifier,
-                painter = painterResource(id = imageResource),
-                contentDescription = articulo.articuloId.toString(),
-                contentScale = ContentScale.Crop
-            )/*     AsyncImage(
-                     modifier = modifier,
-                     model = articulo.url,
-                     contentDescription = articulo.descripcion,
-                     contentScale = ContentScale.Crop
-                 )*/
 
             Column(modifier = Modifier
                 .fillMaxWidth()
@@ -85,7 +72,7 @@ fun CardCarrito(
                 )
                 Text(
 
-                    text = "Talla: ${enumValues<TipoTalla>().firstOrNull { it.ordinal == articulo.tamaño.toInt() }}",
+                    text = "Talla: ${articulo.talla}",
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -93,7 +80,7 @@ fun CardCarrito(
                 Row() {
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = "${df.format(articulo.precio)}€",
+                        text = "${df.format(articulo.precio)} puntos",
                         fontWeight = FontWeight.Bold
                     )
                     OutlinedIconButton(

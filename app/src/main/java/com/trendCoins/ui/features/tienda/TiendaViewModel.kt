@@ -14,8 +14,8 @@ import com.trendCoins.data.ArticuloRepository
 import com.trendCoins.models.Articulo
 import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente
+import com.trendCoins.utilities.Email
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -42,6 +42,7 @@ class TiendaViewModel @Inject constructor(
             "0"
         )
     )
+    var mostrarCarrito by mutableStateOf(false)
     var totalCompra by mutableStateOf(0)
     var verResultadoRuleta by mutableStateOf(false)
     var puntosRuleta by mutableStateOf(0)
@@ -56,20 +57,18 @@ class TiendaViewModel @Inject constructor(
     var sesionIniciada by mutableStateOf(false)
 
 
-
     fun getTotalCompra() {
         totalCompra = listaArticuloCarrito?.map { a -> a.cantidad * a.precio }?.sum() ?: 0
-        }
+    }
+
     fun onChangeScreen(indexScreen: Int) {
         screenState = indexScreen
     }
 
 
-
-    fun sumaPuntosClicker()
-    {
+    fun sumaPuntosClicker() {
         viewModelScope.launch {
-            clienteState=clienteState.copy(puntos = clienteState.puntos+1)
+            clienteState = clienteState.copy(puntos = clienteState.puntos + 1)
             clienteRepository.update(clienteState)
         }
 
@@ -78,7 +77,6 @@ class TiendaViewModel @Inject constructor(
     fun getPuntosusuario(): Int {
         return clienteState.puntos
     }
-
 
 
     /*fun resultadoFinalRuleta(puntos: Int) {
@@ -103,7 +101,6 @@ class TiendaViewModel @Inject constructor(
     var filtroState by mutableStateOf("")
     var carritoState by mutableStateOf(false)
     var numeroArticulosState by mutableStateOf(0)
-    var totalCompraState by mutableStateOf(0f)
     var estaFiltrandoState by mutableStateOf(false)
 
     var pedidoUiState by mutableStateOf(iniciarNuevoPedido())
@@ -118,6 +115,8 @@ class TiendaViewModel @Inject constructor(
     var articuloSeleccionadoState: ArticuloUiState? by mutableStateOf(null)
         private set
 
+    var mail by mutableStateOf(Email)
+
     init {
         viewModelScope.launch {
             articulosState = getArticulos()
@@ -126,42 +125,59 @@ class TiendaViewModel @Inject constructor(
         }
     }
 
-   /* fun onTallaEvent(tallaEvent: TallaEvent) {
+    /* fun onTallaEvent(tallaEvent: TallaEvent) {
 
-        when (tallaEvent) {
-            is TallaEvent.OnClickPequeña -> tallaUiState = inicializaTalla(TipoTalla.PEQUEÑA)
+         when (tallaEvent) {
+             is TallaEvent.OnClickPequeña -> tallaUiState = inicializaTalla(TipoTalla.PEQUEÑA)
 
-            is TallaEvent.OnClickMediana -> tallaUiState = inicializaTalla(TipoTalla.MEDIANA)
+             is TallaEvent.OnClickMediana -> tallaUiState = inicializaTalla(TipoTalla.MEDIANA)
 
-            is TallaEvent.OnClickGrande -> tallaUiState = inicializaTalla(TipoTalla.GRANDE)
+             is TallaEvent.OnClickGrande -> tallaUiState = inicializaTalla(TipoTalla.GRANDE)
 
-            is TallaEvent.OnClickXGrande -> tallaUiState = inicializaTalla(TipoTalla.XGRANDE)
-            else -> {}
-        }
-    }*/
+             is TallaEvent.OnClickXGrande -> tallaUiState = inicializaTalla(TipoTalla.XGRANDE)
+             else -> {}
+         }
+     }*/
 
     fun onTiendaEvent(tiendaEvent: TiendaEvent) {
         when (tiendaEvent) {
 
-            is TiendaEvent.OnTallaChange->
-            {
+            is TiendaEvent.OnCompraRealizada-> {
+                viewModelScope.launch {
+                    clienteState = clienteState.copy(puntos = clienteState.puntos - totalCompra)
+
+                    updateCliente()
+                    mail.sendEmailCompraDetails(clienteState, listaArticuloCarrito, totalCompra)
+                    val articulos = listaArticuloCarrito
+                    articulos?.forEach {
+                        articuloCarritoRepository.deleteArticulo(clienteState.correo, it.descripcion, it.talla)
+                    }
+                    listaArticuloCarrito = mutableListOf<ArticuloCarrito>().toMutableStateList()
+                    mostrarCarrito = false
+                    actualizarCifrasPedido()
+
+                }
+            }
+            is TiendaEvent.OnTallaChange -> {
                 talla = tiendaEvent.talla
             }
 
             is TiendaEvent.OnClickSumaPuntosClicker -> {
-                clienteState=clienteState.copy(puntos = clienteState.puntos+1)
+                clienteState = clienteState.copy(puntos = clienteState.puntos + 1)
 
             }
-            is TiendaEvent.onClickPuntosRuleta->{
 
-                verResultadoRuleta=true
-                puntosRuleta=ObtenerResultadoRuleta(tiendaEvent.indicePuntos)
-                clienteState=clienteState.copy(puntos = clienteState.puntos+puntosRuleta)
+            is TiendaEvent.onClickPuntosRuleta -> {
+
+                verResultadoRuleta = true
+                puntosRuleta = ObtenerResultadoRuleta(tiendaEvent.indicePuntos)
+                clienteState = clienteState.copy(puntos = clienteState.puntos + puntosRuleta)
 
 
             }
-            is TiendaEvent.OnchangeResultadoRuleta->{
-                verResultadoRuleta=false
+
+            is TiendaEvent.OnchangeResultadoRuleta -> {
+                verResultadoRuleta = false
             }
 
 
@@ -176,27 +192,34 @@ class TiendaViewModel @Inject constructor(
             }
 
             is TiendaEvent.OnClickAñadirCesta -> {
-                articuloCarritoState = tiendaEvent.articulo.toArticuloCarrito()
-                if (articuloCarritoState != null) {
-                    //var seleccion: TipoTalla = TipoTalla.NOTALLA
+                viewModelScope.launch {
+                    articuloCarritoState = tiendaEvent.articulo.toArticuloCarrito()
+                    if (articuloCarritoState != null) {
+                        //var seleccion: TipoTalla = TipoTalla.NOTALLA
 
 
-                    if (talla != "") {
-                        articuloCarritoState =
-                            articuloCarritoState.copy(talla = talla)
-                        val articuloAux = buscaArticuloEnCarrito(articuloCarritoState)
-                        if (articuloAux != null) {
-                            val posicion = buscaPosicionArticuloArticulo(articuloAux)
-                           listaArticuloCarrito!![posicion!!] =
-                                listaArticuloCarrito!![posicion].copy(
-                                    cantidad = articuloAux.cantidad + listaArticuloCarrito!![posicion]?.cantidad!!
-                                )
-                        } else listaArticuloCarrito?.add(articuloCarritoState)
+                        if (talla != "") {
+                            articuloCarritoState =
+                                articuloCarritoState.copy(talla = talla)
+                            val articuloAux = buscaArticuloEnCarrito(articuloCarritoState)
+                            if (articuloAux != null) {
+                                val posicion = buscaPosicionArticuloArticulo(articuloAux)
+                                listaArticuloCarrito!![posicion!!] =
+                                    listaArticuloCarrito!![posicion].copy(
+                                        cantidad =  listaArticuloCarrito!![posicion]?.cantidad!! +1
+                                    )
+                                updateCarritoArticulo(posicion!!)
+                            } else {
+                                listaArticuloCarrito?.add(articuloCarritoState)
+                                insertArticuloCarrito(articuloCarritoState)
+                            }
 
-                        actualizarCifrasPedido()
-                        tallaUiState = inicializaTalla()
+                            actualizarCifrasPedido()
+                            talla = "";
+                        }
                     }
                 }
+                mostrarCarrito = true
             }
 
             is TiendaEvent.OnFiltroChange -> {
@@ -243,25 +266,40 @@ class TiendaViewModel @Inject constructor(
             }
 
 
-
             is TiendaEvent.OnClickCarrito -> {
                 if (carritoState == false) carritoState = true
             }
 
             is TiendaEvent.OnClickMas -> {
-                val posicion = buscaPosicionArticuloArticulo(tiendaEvent.articulo.toArticuloCarrito())
-                pedidoUiState.articulos[posicion!!] =
-                    pedidoUiState.articulos[posicion].copy(cantidad = pedidoUiState.articulos[posicion].cantidad + 1)
-                actualizarCifrasPedido()
+                viewModelScope.launch {
+                    val posicion = buscaPosicionArticuloArticulo(tiendaEvent.articulo)
+                    listaArticuloCarrito?.set(
+                        posicion!!,
+                        listaArticuloCarrito!![posicion].copy(cantidad = listaArticuloCarrito!![posicion].cantidad + 1)
+                    )
+                    actualizarCifrasPedido()
+                    updateCarritoArticulo(posicion!!)
+                }
             }
 
             is TiendaEvent.OnClickMenos -> {
-                val posicion = buscaPosicionArticuloArticulo(tiendaEvent.articulo.toArticuloCarrito())
-                if (pedidoUiState.articulos[posicion!!].cantidad - 1 > 0) {
-                    pedidoUiState.articulos[posicion] =
-                        pedidoUiState.articulos[posicion].copy(cantidad = pedidoUiState.articulos[posicion].cantidad - 1)
-                } else pedidoUiState.articulos.removeAt(posicion)
-                actualizarCifrasPedido()
+                viewModelScope.launch {
+                    val posicion = buscaPosicionArticuloArticulo(tiendaEvent.articulo)
+                    if (listaArticuloCarrito!![posicion!!].cantidad - 1 > 0) {
+                        listaArticuloCarrito!![posicion] =
+                            listaArticuloCarrito!![posicion].copy(cantidad = listaArticuloCarrito!![posicion].cantidad - 1)
+                        updateCarritoArticulo(posicion!!)
+                    } else {
+                        listaArticuloCarrito!!.removeAt(posicion)
+                        if (listaArticuloCarrito!!.isEmpty())
+                        {
+                            mostrarCarrito = false
+                        }
+                        deleteArticuloCarrito(tiendaEvent.articulo)
+                    }
+                    actualizarCifrasPedido()
+
+                }
             }
 
             is TiendaEvent.OnClickComprar -> {
@@ -289,7 +327,7 @@ class TiendaViewModel @Inject constructor(
             is TiendaEvent.OnClickSalir -> {
 
                 //clienteState=clienteState.copy(puntos = puntos)
-                sesionIniciada=false
+                sesionIniciada = false
                 viewModelScope.launch {
                     updateCliente()
                     clearTienda()
@@ -358,6 +396,18 @@ class TiendaViewModel @Inject constructor(
         totalCompra = listaArticuloCarrito?.map { a -> a.cantidad * a.precio }?.sum() ?: 0
     }
 
+    suspend fun updateCarritoArticulo(posicion: Int) {
+        articuloCarritoRepository.update(listaArticuloCarrito!![posicion])
+    }
+
+    suspend fun insertArticuloCarrito(articulo: ArticuloCarrito) {
+        articuloCarritoRepository.insert(articulo)
+    }
+
+    suspend fun deleteArticuloCarrito(articulo: ArticuloCarrito) {
+        articuloCarritoRepository.deleteArticulo(clienteState.correo, articulo.descripcion, articulo.talla)
+    }
+
     suspend private fun getCliente(login: String) = clienteRepository.getClienteCorreo(login)
 
     private fun Articulo.toArticuloUiState() =
@@ -394,7 +444,7 @@ class TiendaViewModel @Inject constructor(
 
     fun actualizaCliente(correo: String) {
 
-        sesionIniciada=true
+        sesionIniciada = true
         viewModelScope.launch {
             val c = clienteRepository.getClienteCorreo(correo)
             clienteState = Cliente(
@@ -409,20 +459,23 @@ class TiendaViewModel @Inject constructor(
                 c.puntos
             )
             /*Mirar lo del update de los puntos*/
-            puntos= clienteState.puntos
+            puntos = clienteState.puntos
 
 //            pedidoUiState = pedidoUiState.copy(dniCliente = c.dni)
-            if (clienteState.deseados.size > 0)
-            {
+            if (clienteState.deseados.size > 0) {
                 articulosState =
                     articulosState.checkFavoritos().toMutableStateList()
 
-                articulosFavoritosState= checkSoloFavoritos().toMutableStateList()
+                articulosFavoritosState = checkSoloFavoritos().toMutableStateList()
 
             }
 
-            listaArticuloCarrito= articuloCarritoRepository.get(clienteState.correo)?.toMutableStateList()
+            listaArticuloCarrito =
+                articuloCarritoRepository.get(c.correo)?.toMutableStateList()
 
+            if (listaArticuloCarrito!!.isNotEmpty()) {
+                actualizarCifrasPedido()
+            }
         }
 
     }
@@ -435,7 +488,6 @@ class TiendaViewModel @Inject constructor(
             filtroState = ""
             carritoState = false
             numeroArticulosState = 0
-            totalCompraState = 0f
             estaFiltrandoState = false
             articuloSeleccionadoState = null
             mostrarFavoritoState = false
@@ -455,6 +507,7 @@ class TiendaViewModel @Inject constructor(
         }
         return listaChecked
     }
+
     private fun checkSoloFavoritos(): MutableList<ArticuloUiState> {
         var listaChecked = mutableListOf<ArticuloUiState>()
         articulosState.forEach {
@@ -466,8 +519,16 @@ class TiendaViewModel @Inject constructor(
         }
         return listaChecked
     }
+
     fun ArticuloUiState.toArticuloCarrito() =
-        ArticuloCarrito(this.id, correoCliente = clienteState.correo, this.descripcion, this.precio,1 , talla)
+        ArticuloCarrito(
+            this.id,
+            correoCliente = clienteState.correo,
+            this.descripcion,
+            this.precio,
+            1,
+            talla
+        )
 
     private fun MutableList<Articulo>.toArticulosUiState() =
         this.map { it.toArticuloUiState() }.toMutableList()

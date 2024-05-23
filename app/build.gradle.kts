@@ -92,6 +92,9 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     implementation("androidx.room:room-paging:$roomVersion")
+    implementation("javax.inject:javax.inject:1")
+    implementation ("com.sun.mail:android-mail:1.6.0")
+    implementation ("com.sun.mail:android-activation:1.6.0")
 
 }
 

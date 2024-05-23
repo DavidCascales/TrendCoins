@@ -63,46 +63,11 @@ fun DialogoCompra(
 ) {
 
     val contexto = LocalContext.current
-
-    data class FilterChipGroupUiState(
-        val label: String = "",
-        val selected: Boolean = false,
-        val onClick: () -> Unit = {}
-    )
-
-
     var tallaSeleccionadaState by remember {
         mutableStateOf(false)
     }
-/*
-    var contenido= mutableListOf(
-        FilterChipGroupUiState(
-            label = TipoTalla.PEQUEÑA.tipo,
-            selected =talla.tallaSeleccionada[TipoTalla.PEQUEÑA]!!,
-            onClick = {
-                onClickTalla(TallaEvent.OnClickPequeña(talla))
 
-            }
-        ),
-        FilterChipGroupUiState(
-            label = TipoTalla.MEDIANA.tipo,
-            selected =talla.tallaSeleccionada[TipoTalla.MEDIANA]!!,
-            onClick = { onClickTalla(TallaEvent.OnClickMediana(talla)) }
-        ),
-        FilterChipGroupUiState(
-            label = TipoTalla.GRANDE.tipo,
-            selected = talla.tallaSeleccionada[TipoTalla.GRANDE]!!,
-            onClick = { onClickTalla(TallaEvent.OnClickGrande(talla)) }
-        ),
-        FilterChipGroupUiState(
-            label = TipoTalla.XGRANDE.tipo,
-            selected = talla.tallaSeleccionada[TipoTalla.XGRANDE]!!,
-            onClick = { onClickTalla(TallaEvent.OnClickXGrande(talla)) }
-        )
-    )
 
-    var contenidoAuxiliar =contenido.toMutableList()
-    */
     AlertDialog(
         modifier = Modifier.height(500.dp),
         onDismissRequest = onDismissRequest,
@@ -122,14 +87,9 @@ fun DialogoCompra(
                     contentDescription = articulo.descripcion,
                     contentScale = ContentScale.Crop
                 )
-                /*     AsyncImage(
-                     modifier = modifier,
-                     model = articulo.url,
-                     contentDescription = articulo.descripcion,
-                     contentScale = ContentScale.Crop
-                 )*/
 
-                Text("Elige la talla del vestido", color = Color.Black)
+
+                Text("Elige la talla ", color = Color(0xFFFFA500))
 
 
                 val sizes = listOf("S", "M", "L", "XL")
@@ -137,6 +97,7 @@ fun DialogoCompra(
                     sizes.forEach { size ->
                         Button(onClick = { onTiendaEvent(TiendaEvent.OnTallaChange(size)) }) {
                             Text(text = size)
+                            tallaSeleccionadaState=true
                         }
                     }
                 }

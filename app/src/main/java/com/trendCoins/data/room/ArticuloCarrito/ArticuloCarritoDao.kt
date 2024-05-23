@@ -25,4 +25,7 @@ interface ArticuloCarritoDao {
     @Query("DELETE FROM articulosCarrito WHERE correo_cliente =:correo")
     suspend fun delete(correo :String)
 
+    @Query("DELETE FROM articulosCarrito WHERE correo_cliente =:correo AND descripcion =:descripcion AND talla =:talla")
+    suspend fun deleteArticulo(correo :String , descripcion :String , talla :String)
+
 }

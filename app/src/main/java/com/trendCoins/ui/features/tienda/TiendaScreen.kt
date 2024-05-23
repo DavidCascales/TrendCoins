@@ -3,6 +3,7 @@ package com.pmdm.tienda.ui.features.tienda
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,18 +23,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pmdm.tienda.ui.features.tienda.components.BarraNavegacion
 import com.pmdm.tienda.ui.features.tienda.components.Escaparate
 import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
+import com.pmdm.tienda.ui.features.tienda.components.Carrito
 import com.trendCoins.R
+import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente
 import com.trendCoins.ui.features.tienda.components.DeseadosScreen
 
@@ -49,7 +50,7 @@ fun TiendaScreen(
     estaFiltrando: Boolean,
     carrito: Boolean,
     numerArticulos: Int,
-    totalCompra: Float,
+    totalCompra: Int,
     tallaUiState: TallaUiState,
     onTiendaEvent: (TiendaEvent) -> Unit,
     onNavigateToNewUser: (String) -> Unit,
@@ -59,7 +60,9 @@ fun TiendaScreen(
     listaRuleta: List<String>,
     puntosRuleta: Int,
     verResultadoRuleta: Boolean,
-    deseados: List<ArticuloUiState>
+    deseados: List<ArticuloUiState>,
+    listaArticuloCarrito: List<ArticuloCarrito>,
+    mostrarCarrito: Boolean
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -167,9 +170,28 @@ fun TiendaScreen(
                 }
 
                 4 -> {
-                    Column {
-                        Text(text = "Aqui va el carrito")
+                    if (!mostrarCarrito)
+                    {
+                        Column (modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center){
+                            Text(text = "No tienes articulos en el carrito",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 25.sp,
+                                color = Color.Red
+                            )
+                        }
                     }
+                    else
+                    {
+                        Carrito(
+                            listaArticuloCarrito = listaArticuloCarrito,
+                            onTiendaEvent = onTiendaEvent,
+                            totalCompra = totalCompra,
+                            puntos=clienteUiState.puntos
+                        )
+                    }
+
                 }
             }
 
