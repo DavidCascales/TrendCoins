@@ -1,11 +1,10 @@
-package com.pmdm.tienda.ui.features.tienda.components
+package com.trendCoins.ui.features.tienda.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,10 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pmdm.tienda.ui.features.tienda.ArticuloUiState
-import com.pmdm.tienda.ui.features.tienda.TallaEvent
-import com.pmdm.tienda.ui.features.tienda.TallaUiState
-import com.pmdm.tienda.ui.features.tienda.TiendaEvent
+import com.trendCoins.ui.features.tienda.ArticuloUiState
+import com.trendCoins.ui.features.tienda.TiendaEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +36,6 @@ import com.pmdm.tienda.ui.features.tienda.TiendaEvent
 fun Escaparate(
     articulos: List<ArticuloUiState>,
     articuloSeleccionado: ArticuloUiState?,
-    tallaUiState: TallaUiState,
     onTiendaEvent: (TiendaEvent) -> Unit,
     filtro: String,
     estaFiltrando: Boolean,
@@ -130,7 +126,6 @@ fun Escaparate(
 
                    onTiendaEvent(TiendaEvent.OnClickAñadirCesta(it))
                },
-               //talla = tallaUiState,
                onDismissRequest = {
                    onTiendaEvent(TiendaEvent.OnDismissDialog)
                },

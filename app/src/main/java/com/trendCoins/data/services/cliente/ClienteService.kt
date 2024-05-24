@@ -1,7 +1,7 @@
-package com.pmdm.tienda.data.services.cliente
+package com.trendCoins.data.services.cliente
 
 
-import com.pmdm.tienda.data.services.RespuestaApi
+import com.trendCoins.data.services.RespuestaApi
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -35,11 +35,5 @@ interface ClienteService {
 
 
 
-/*
-    @Transaction
-    // No indicamos la relación en la consulta ya está definida
-    // en el objeto a recuperar. Lista de objetos ClienteConPedidos
-    @Query("SELECT * FROM clientes WHERE dni=(:clienteDni)")
-    suspend fun getPedidosCliente(clienteDni: String): List<ClienteConPedidos>
-*/
+
 }

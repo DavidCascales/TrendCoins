@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.composables
+package com.trendCoins.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package com.pmdm.tienda.data.services.cliente
+package com.trendCoins.data.services.cliente
 
 
 data class ClienteApi(

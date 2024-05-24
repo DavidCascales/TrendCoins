@@ -1,14 +1,9 @@
-package com.pmdm.tienda.ui.features.newuser
+package com.trendCoins.ui.features.newuser
 
-import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesUiState
-import com.pmdm.tienda.ui.features.newuser.direccion.DireccionUiState
-import com.pmdm.tienda.ui.features.newuser.newuserpassword.LoginPasswordUiState
+
 
 data class NewUserUiState(
-    /*val datosPersonalesUiState: DatosPersonalesUiState = DatosPersonalesUiState(),
-    val direccionUiState: DireccionUiState = DireccionUiState(),
-    val newUserPasswordUiState: LoginPasswordUiState = LoginPasswordUiState(),
-*/
+
     val correo: String ,
     val contraseña: String ,
     val nombre: String ,

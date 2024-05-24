@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.login
+package com.trendCoins.ui.features.login
 
 
 import androidx.compose.foundation.layout.*
@@ -14,8 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pmdm.tienda.ui.composables.CircularImageFromResource
-import com.pmdm.tienda.ui.composables.TextNewAccount
+import com.trendCoins.ui.composables.CircularImageFromResource
+import com.trendCoins.ui.composables.TextNewAccount
 import com.pmdm.tienda.ui.features.login.components.UsuarioPassword
 import com.trendCoins.R
 import com.trendCoins.ui.theme.Purple40

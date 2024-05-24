@@ -1,4 +1,4 @@
-package com.pmdm.tienda.data.services.articulo
+package com.trendCoins.data.services.articulo
 
 
 

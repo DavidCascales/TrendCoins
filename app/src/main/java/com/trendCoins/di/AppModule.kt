@@ -1,8 +1,8 @@
 package com.trendCoins.di
 
 import android.content.Context
-import com.pmdm.tienda.data.room.articulo.ArticuloService
-import com.pmdm.tienda.data.services.cliente.ClienteService
+import com.trendCoins.data.services.articulo.ArticuloService
+import com.trendCoins.data.services.cliente.ClienteService
 import com.trendCoins.data.ArticuloCarritoRepository
 import com.trendCoins.data.room.ArticuloCarrito.ArticuloCarritoDao
 import com.trendCoins.data.room.CarritoDB

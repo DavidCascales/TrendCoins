@@ -1,8 +1,7 @@
-package com.pmdm.tienda.data.services.articulo
+package com.trendCoins.data.services.articulo
 
 import android.util.Log
-import com.pmdm.tienda.data.room.articulo.ArticuloService
-import com.pmdm.tienda.data.services.ApiServicesException
+import com.trendCoins.data.services.ApiServicesException
 import javax.inject.Inject
 
 class ArticuloServiceImplementation @Inject constructor(

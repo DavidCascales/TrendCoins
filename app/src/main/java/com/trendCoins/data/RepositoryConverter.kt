@@ -2,20 +2,15 @@ package com.trendCoins.data
 
 
 
-import com.pmdm.tienda.data.services.articulo.ArticuloApi
-import com.pmdm.tienda.data.services.cliente.ClienteApi
+import com.trendCoins.data.services.articulo.ArticuloApi
+import com.trendCoins.data.services.cliente.ClienteApi
 import com.trendCoins.data.room.ArticuloCarrito.ArticuloCarritoEntity
 import com.trendCoins.models.Articulo
 import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente
 
 
-//region usuarioEntity
-/*fun UsuarioApi.toUsuario(): Usuario = Usuario(this.login.desformateaCorreo(), this.password)
-fun MutableList<UsuarioApi>.toUsuarios(): List<Usuario> =
-    this.map { it.toUsuario() }
-fun Usuario.toUsuarioApi(): UsuarioApi= UsuarioApi(this.login.formateaCorreo(), this.password)
-//endregion
+
 //region ClienteApi*/
 fun MutableList<Cliente>.toClientesApi(): List<ClienteApi> =
     this.map { it.toClienteApi() }
@@ -59,15 +54,7 @@ private fun String.aMutableListInt(): MutableList<Int> {
 
  fun MutableList<Int>.aString(): String =
     this.joinToString (separator=",")
-/*
-fun String.formateaCorreo():String
-{
-    return this.replace('@','_').replace('.','-')
-}
-fun String.desformateaCorreo():String
-{
-    return this.replace('_','@').replace('-','.')
-}*/
+
 
 
 

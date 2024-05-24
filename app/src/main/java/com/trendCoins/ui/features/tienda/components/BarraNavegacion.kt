@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.tienda.components
+package com.trendCoins.ui.features.tienda.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -84,9 +83,3 @@ fun CarritoCompra(numeroArticulos: Int) {
                 })
     }
 }
-/*
-@Preview
-@Composable
-fun bottomAppBarTest() {
-    BarraNavegacion(15, {}, {}, {}, {})
-}*/

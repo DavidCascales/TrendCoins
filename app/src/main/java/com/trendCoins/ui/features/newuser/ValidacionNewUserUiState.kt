@@ -1,8 +1,6 @@
-package com.pmdm.tienda.ui.features.newuser
+package com.trendCoins.ui.features.newuser
 
-import com.pmdm.tienda.ui.features.newuser.datospersonales.ValidacionDatosPersonalesUiState
-import com.pmdm.tienda.ui.features.newuser.direccion.ValidacionDireccionUiState
-import com.pmdm.tienda.ui.features.newuser.newuserpassword.ValidacionLoginPasswordUiState
+
 import com.pmdm.tienda.utilities.validacion.Validacion
 import com.pmdm.tienda.utilities.validacion.ValidacionCompuesta
 

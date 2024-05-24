@@ -1,20 +1,12 @@
-package com.pmdm.tienda.ui.navigation
+package com.trendCoins.ui.features.navigation
 
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.pmdm.tienda.ui.features.login.LoginEvent
-import com.pmdm.tienda.ui.features.login.LoginScreen
-import com.pmdm.tienda.ui.features.login.LoginViewModel
-
-import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
+import com.trendCoins.ui.features.login.LoginScreen
+import com.trendCoins.ui.features.login.LoginViewModel
 
 
 const val HomeRoute = "login?{correo}"

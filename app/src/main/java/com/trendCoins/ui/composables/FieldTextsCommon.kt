@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.composables
+package com.trendCoins.ui.composables
 
 import android.telephony.PhoneNumberUtils
 import androidx.compose.foundation.text.KeyboardActions

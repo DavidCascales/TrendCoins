@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.tienda
+package com.trendCoins.ui.features.tienda
 
 import com.trendCoins.models.ArticuloCarrito
 
@@ -6,7 +6,7 @@ import com.trendCoins.models.ArticuloCarrito
 sealed interface TiendaEvent {
 
     object OnClickSumaPuntosClicker : TiendaEvent
-    object OnCompraRealizada:TiendaEvent
+    object OnCompraRealizada: TiendaEvent
     data class onClickPuntosRuleta(var indicePuntos: Int) : TiendaEvent
     object OnchangeResultadoRuleta : TiendaEvent
     data class OnClickArticulo(val articulo: ArticuloUiState) : TiendaEvent
@@ -20,7 +20,6 @@ sealed interface TiendaEvent {
     data class OnClickMenos(var articulo: ArticuloCarrito) : TiendaEvent
     object OnDismissDialog : TiendaEvent
     object OnClickQuitarFiltro : TiendaEvent
-    object OnClickCarrito : TiendaEvent
-    object OnClickComprar : TiendaEvent
+
     object OnClickSalir : TiendaEvent
 }

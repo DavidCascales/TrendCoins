@@ -1,7 +1,6 @@
 package com.trendCoins.utilities
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.trendCoins.BuildConfig
 import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente
 
@@ -61,7 +60,7 @@ object Email {
             multipart.addBodyPart(htmlPart)
             mailMessage.setContent(multipart)
 
-            setSubject("PeludosVet - Código restauración contraseña")
+            setSubject("TrendCoins - Código restauración contraseña")
             setRecipient(cliente.correo)
             Transport.send(mailMessage)
         }
@@ -77,7 +76,7 @@ object Email {
             multipart.addBodyPart(htmlPart)
             mailMessage.setContent(multipart)
 
-            setSubject("PeludosVet - Próxima Cita")
+            setSubject("TrendCoins - Confirmación Compra")
             setRecipient(cliente.correo)
             Transport.send(mailMessage)
         }

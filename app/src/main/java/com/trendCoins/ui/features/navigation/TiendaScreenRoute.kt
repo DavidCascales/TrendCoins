@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.navigation
+package com.trendCoins.ui.features.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -6,15 +6,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.pmdm.tienda.ui.features.tienda.TiendaScreen
-import com.pmdm.tienda.ui.features.tienda.TiendaViewModel
+import com.trendCoins.ui.features.tienda.TiendaScreen
+import com.trendCoins.ui.features.tienda.TiendaViewModel
 
 const val TiendaRoute = "tienda/{correo}"
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.tiendaScreenRoute(
     tiendaViewModel: TiendaViewModel,
-    onNavigateToPedido: (dni: String) -> Unit,
     onNavigateToNewUser: (login: String) -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
@@ -30,13 +29,9 @@ fun NavGraphBuilder.tiendaScreenRoute(
             clienteUiState = tiendaViewModel.clienteState!!,
             articulos = tiendaViewModel.articulosState?.toList()!!,
             deseados = tiendaViewModel.articulosFavoritosState.toList()!!,
-            muestraFavoritos = tiendaViewModel.mostrarFavoritoState,
             articuloSeleccionado = tiendaViewModel.articuloSeleccionadoState,
             filtro = tiendaViewModel.filtroState,
             estaFiltrando = tiendaViewModel.estaFiltrandoState,
-            tallaUiState = tiendaViewModel.tallaUiState,
-            carrito = tiendaViewModel.carritoState,
-            numerArticulos = tiendaViewModel.numeroArticulosState,
             totalCompra = tiendaViewModel.totalCompra,
             onTiendaEvent = tiendaViewModel::onTiendaEvent,
             onNavigateToNewUser = onNavigateToNewUser,

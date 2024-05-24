@@ -6,9 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.pmdm.tienda.ui.composables.CheckboxWithText
-import com.pmdm.tienda.ui.composables.OutlinedTextFieldEmail
-import com.pmdm.tienda.ui.composables.OutlinedTextFieldPassword
+import com.trendCoins.ui.composables.OutlinedTextFieldEmail
+import com.trendCoins.ui.composables.OutlinedTextFieldPassword
 import com.pmdm.tienda.utilities.validacion.Validacion
 import com.trendCoins.ui.theme.TrendCoinsTheme
 

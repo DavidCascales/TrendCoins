@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.tienda
+package com.trendCoins.ui.features.tienda
 
 data class ArticuloUiState(
     val id: Int = 0, val imagen: String = "", val descripcion: String = "",

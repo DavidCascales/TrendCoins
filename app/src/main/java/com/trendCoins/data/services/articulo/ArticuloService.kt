@@ -1,12 +1,8 @@
-package com.pmdm.tienda.data.room.articulo
+package com.trendCoins.data.services.articulo
 
-import com.pmdm.tienda.data.services.RespuestaApi
-import com.pmdm.tienda.data.services.articulo.ArticuloApi
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.POST
 import retrofit2.http.Path
 
 

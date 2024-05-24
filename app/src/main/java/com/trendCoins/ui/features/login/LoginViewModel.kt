@@ -1,11 +1,11 @@
-package com.pmdm.tienda.ui.features.login
+package com.trendCoins.ui.features.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pmdm.tienda.data.services.ApiServicesException
+import com.trendCoins.data.services.ApiServicesException
 import com.trendCoins.data.ClienteRepository
 import com.trendCoins.models.Cliente
 import com.trendCoins.utilities.Encriptacion.toSHA256

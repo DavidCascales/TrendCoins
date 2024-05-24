@@ -1,8 +1,6 @@
-package com.pmdm.tienda.ui.features.newuser
+package com.trendCoins.ui.features.newuser
 
-import com.pmdm.tienda.ui.features.newuser.datospersonales.ValidadorDatosPersonales
-import com.pmdm.tienda.ui.features.newuser.direccion.ValidadorDireccion
-import com.pmdm.tienda.ui.features.newuser.newuserpassword.ValidadorLoginPassword
+
 import com.pmdm.tienda.utilities.validacion.Validador
 import com.pmdm.tienda.utilities.validacion.ValidadorCompuesto
 import com.pmdm.tienda.utilities.validacion.validadores.ValidadorCorreo
@@ -13,9 +11,7 @@ import com.pmdm.tienda.utilities.validacion.validadores.ValidadorTextoNoVacio
 import javax.inject.Inject
 
 class ValidadorNewUser @Inject constructor(
-    /*val validadorDatosPersonales: ValidadorDatosPersonales,
-    val validadorDireccion: ValidadorDireccion,
-    val validadorLoginPassword: ValidadorLoginPassword*/
+
 
 ) : Validador<NewUserUiState> {
 

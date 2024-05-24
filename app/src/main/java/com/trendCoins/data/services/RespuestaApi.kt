@@ -1,4 +1,4 @@
-package com.pmdm.tienda.data.services
+package com.trendCoins.data.services
 
 data class RespuestaApi (
     val respuesta : Int,

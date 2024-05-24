@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.tienda
+package com.trendCoins.ui.features.tienda
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -79,31 +79,17 @@ class TiendaViewModel @Inject constructor(
     }
 
 
-    /*fun resultadoFinalRuleta(puntos: Int) {
-        onMostrarSnackBar
-        sumaPuntos(onObtenerResultadoRuleta(puntos))
-        viewModelScope.launch {
-            delay(2000)
-            onMostrarSnackBar()
-        }
-
-    }*/
-
-//    fun sumaPuntos(puntos: Int) {
-//        clienteState = clienteState.copy(puntos = getPuntosusuario() + puntos)
-//    }
-
     fun ObtenerResultadoRuleta(resultado: Int): Int {
         return resultadosRuleta[resultado].toInt()
 
     }
 
     var filtroState by mutableStateOf("")
-    var carritoState by mutableStateOf(false)
-    var numeroArticulosState by mutableStateOf(0)
+
+
     var estaFiltrandoState by mutableStateOf(false)
 
-    var pedidoUiState by mutableStateOf(iniciarNuevoPedido())
+
     var listaArticuloCarrito by mutableStateOf(mutableListOf<ArticuloCarrito>()?.toMutableStateList())
     var mostrarFavoritoState by mutableStateOf(false)
 
@@ -111,7 +97,7 @@ class TiendaViewModel @Inject constructor(
     var articulosState by mutableStateOf(mutableListOf<ArticuloUiState>().toMutableStateList())
     var articulosFavoritosState by mutableStateOf(mutableListOf<ArticuloUiState>().toMutableStateList())
 
-    var tallaUiState: TallaUiState by mutableStateOf(inicializaTalla())
+
     var articuloSeleccionadoState: ArticuloUiState? by mutableStateOf(null)
         private set
 
@@ -125,19 +111,7 @@ class TiendaViewModel @Inject constructor(
         }
     }
 
-    /* fun onTallaEvent(tallaEvent: TallaEvent) {
 
-         when (tallaEvent) {
-             is TallaEvent.OnClickPequeña -> tallaUiState = inicializaTalla(TipoTalla.PEQUEÑA)
-
-             is TallaEvent.OnClickMediana -> tallaUiState = inicializaTalla(TipoTalla.MEDIANA)
-
-             is TallaEvent.OnClickGrande -> tallaUiState = inicializaTalla(TipoTalla.GRANDE)
-
-             is TallaEvent.OnClickXGrande -> tallaUiState = inicializaTalla(TipoTalla.XGRANDE)
-             else -> {}
-         }
-     }*/
 
     fun onTiendaEvent(tiendaEvent: TiendaEvent) {
         when (tiendaEvent) {
@@ -237,7 +211,6 @@ class TiendaViewModel @Inject constructor(
                     articulosState = getArticulos()
                     filtroState = ""
                     estaFiltrandoState = false
-                    carritoState = false
                     mostrarFavoritoState = false
                 }
             }
@@ -265,10 +238,6 @@ class TiendaViewModel @Inject constructor(
 
             }
 
-
-            is TiendaEvent.OnClickCarrito -> {
-                if (carritoState == false) carritoState = true
-            }
 
             is TiendaEvent.OnClickMas -> {
                 viewModelScope.launch {
@@ -302,31 +271,9 @@ class TiendaViewModel @Inject constructor(
                 }
             }
 
-            is TiendaEvent.OnClickComprar -> {
-                /*
-                var codigoNuevoPedido = -1L
-                viewModelScope.launch {
-                    try {
 
-                        codigoNuevoPedido = pedidoRepository.idPedidoAAñadir()
-                    } catch (e: ApiServicesException) {
-                        if (codigoNuevoPedido == -1L) codigoNuevoPedido = 1
-                    }
-                    pedidoUiState = pedidoUiState.copy(
-                        pedidoId = codigoNuevoPedido
-                    )
-                    val p = pedidoUiState.toPedido()
-                    pedidoRepository.insert(p)
-                    numeroArticulosState = 0
-                    pedidoUiState = iniciarNuevoPedido()
-                    carritoState = false
-                    actualizarCifrasPedido()
-                }*/
-            }
 
             is TiendaEvent.OnClickSalir -> {
-
-                //clienteState=clienteState.copy(puntos = puntos)
                 sesionIniciada = false
                 viewModelScope.launch {
                     updateCliente()
@@ -336,7 +283,7 @@ class TiendaViewModel @Inject constructor(
             }
 
 
-            else -> {}
+
         }
     }
 
@@ -366,20 +313,8 @@ class TiendaViewModel @Inject constructor(
 
     }
 
-    private fun inicializaTalla(): TallaUiState {
-        var tallaSeleccionada = mutableMapOf<TipoTalla, Boolean>()
-        tallaSeleccionada[TipoTalla.PEQUEÑA] = false
-        tallaSeleccionada[TipoTalla.MEDIANA] = false
-        tallaSeleccionada[TipoTalla.GRANDE] = false
-        tallaSeleccionada[TipoTalla.XGRANDE] = false
-        return TallaUiState(tallaSeleccionada)
-    }
 
-    private fun inicializaTalla(tipoTalla: TipoTalla): TallaUiState {
-        var talla = inicializaTalla()
-        talla.tallaSeleccionada[tipoTalla] = true
-        return talla
-    }
+
 
     private fun buscaArticuloEnCarrito(articulo: ArticuloCarrito): ArticuloCarrito? {
         return listaArticuloCarrito?.find { a ->
@@ -392,7 +327,6 @@ class TiendaViewModel @Inject constructor(
     }
 
     private fun actualizarCifrasPedido() {
-        numeroArticulosState = listaArticuloCarrito?.map { a -> a.cantidad }?.sum() ?: 0
         totalCompra = listaArticuloCarrito?.map { a -> a.cantidad * a.precio }?.sum() ?: 0
     }
 
@@ -413,15 +347,6 @@ class TiendaViewModel @Inject constructor(
     private fun Articulo.toArticuloUiState() =
         ArticuloUiState(this.id, this.imagen, this.descripcion, this.precio, this.tipo, false)
 
-    private fun iniciarNuevoPedido(): PedidoUiState {
-        return PedidoUiState(
-            dniCliente = clienteState.correo,
-            total = 0F,
-            fecha = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
-            articulos = mutableListOf<ArticuloDePedidoUiState>(),
-            iniciado = false
-        )
-    }
 
     suspend fun inicializaCliente(correo: String?): Cliente {
         if (correo == null) return Cliente("", "", "", "", "", mutableListOf(), "", "", 0)
@@ -474,6 +399,7 @@ class TiendaViewModel @Inject constructor(
                 articuloCarritoRepository.get(c.correo)?.toMutableStateList()
 
             if (listaArticuloCarrito!!.isNotEmpty()) {
+                mostrarCarrito=true;
                 actualizarCifrasPedido()
             }
         }
@@ -483,11 +409,7 @@ class TiendaViewModel @Inject constructor(
     fun clearTienda() {
         viewModelScope.launch {
             clienteState = inicializaCliente(null)
-            pedidoUiState = iniciarNuevoPedido()
-            tallaUiState = inicializaTalla()
             filtroState = ""
-            carritoState = false
-            numeroArticulosState = 0
             estaFiltrandoState = false
             articuloSeleccionadoState = null
             mostrarFavoritoState = false
@@ -532,25 +454,6 @@ class TiendaViewModel @Inject constructor(
 
     private fun MutableList<Articulo>.toArticulosUiState() =
         this.map { it.toArticuloUiState() }.toMutableList()
-    /*
-        private fun ArticuloDePedidoUiState.toArticuloDePedido() =
-            ArticuloDePedido(this.articuloId, this.tamaño, this.cantidad)
-    */
-    /*
-    private fun MutableList<ArticuloDePedidoUiState>.toArticuloDePedido(): MutableList<ArticuloDePedido> {
-        return this.map { it.toArticuloDePedido() }.toMutableList()
-    }
-    */
-
-    /*
-        private fun PedidoUiState.toPedido() = Pedido(
-            this.pedidoId,
-            this.dniCliente,
-            totalCompraState,
-            this.fecha,
-            this.articulos.toArticuloDePedido()
-        )
-        */
 
 }
 

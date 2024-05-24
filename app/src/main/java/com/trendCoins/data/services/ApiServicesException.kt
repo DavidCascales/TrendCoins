@@ -1,3 +1,3 @@
-package com.pmdm.tienda.data.services
+package com.trendCoins.data.services
 
 class ApiServicesException(mensaje: String) : Exception(mensaje)

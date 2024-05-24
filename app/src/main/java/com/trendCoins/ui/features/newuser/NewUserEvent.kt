@@ -1,9 +1,6 @@
 package com.trendCoins.ui.features.newuser
 
 import androidx.navigation.NavOptions
-import com.pmdm.tienda.ui.features.newuser.datospersonales.DatosPersonalesEvent
-import com.pmdm.tienda.ui.features.newuser.direccion.DireccionEvent
-import com.pmdm.tienda.ui.features.newuser.newuserpassword.NewUserPasswordEvent
 
 sealed interface NewUserEvent {
 

@@ -8,8 +8,7 @@ import javax.inject.Inject
 
 class ArticuloCarritoRepository @Inject constructor(private val proveedorcarrito: ArticuloCarritoDao) {
 
-    /*suspend fun get(): List<ArticuloCarrito> =
-        withContext(Dispatchers.IO) { proveedorcarrito.get().toClientes() }*/
+
 
     suspend fun get(login: String): List<ArticuloCarrito> = withContext(Dispatchers.IO) {
         proveedorcarrito.get(login).toMutableList().toArticuloCarrito()

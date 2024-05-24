@@ -4,18 +4,17 @@ import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.pmdm.tienda.ui.features.login.LoginViewModel
-import com.pmdm.tienda.ui.features.newuser.NewUserViewModel
-import com.pmdm.tienda.ui.features.tienda.TiendaViewModel
-import com.pmdm.tienda.ui.navigation.HomeRoute
+import com.trendCoins.ui.features.login.LoginViewModel
+import com.trendCoins.ui.features.newuser.NewUserViewModel
+import com.trendCoins.ui.features.tienda.TiendaViewModel
+import com.trendCoins.ui.features.navigation.HomeRoute
 
-import com.pmdm.tienda.ui.navigation.loginScreenRoute
-import com.pmdm.tienda.ui.navigation.navigateToLogin
-import com.pmdm.tienda.ui.navigation.navigateToNewUser
-import com.pmdm.tienda.ui.navigation.navigateToPedido
-import com.pmdm.tienda.ui.navigation.navigateToTienda
-import com.pmdm.tienda.ui.navigation.newUserScreenRoute
-import com.pmdm.tienda.ui.navigation.tiendaScreenRoute
+import com.trendCoins.ui.features.navigation.loginScreenRoute
+import com.trendCoins.ui.features.navigation.navigateToLogin
+import com.trendCoins.ui.features.navigation.navigateToNewUser
+import com.trendCoins.ui.features.navigation.navigateToTienda
+import com.trendCoins.ui.features.navigation.newUserScreenRoute
+import com.trendCoins.ui.features.navigation.tiendaScreenRoute
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -25,7 +24,6 @@ fun TiendaNavHost() {
     val newUserViewModel: NewUserViewModel = hiltViewModel()
     val loginViewModel: LoginViewModel = hiltViewModel()
     val tiendaViewModel: TiendaViewModel = hiltViewModel()
-    //val pedidosViewModel: PedidosViewModel = hiltViewModel()
     NavHost(
         navController = navController,
         startDestination = HomeRoute
@@ -54,9 +52,6 @@ fun TiendaNavHost() {
             })
         tiendaScreenRoute(
             tiendaViewModel = tiendaViewModel,
-            onNavigateToPedido = { dni ->
-                navController.navigateToPedido(dni)
-            },
             onNavigateToNewUser = {
                 newUserViewModel.esNuevoCliente=false
                 tiendaViewModel.sesionIniciada=false
@@ -68,6 +63,6 @@ fun TiendaNavHost() {
             },
 
         )
-        //pedidosScreenRoute(pedidosViewModel=pedidosViewModel)
+
     }
 }

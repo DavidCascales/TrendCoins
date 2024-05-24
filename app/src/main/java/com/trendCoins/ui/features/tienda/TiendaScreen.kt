@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.tienda
+package com.trendCoins.ui.features.tienda
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -29,10 +29,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pmdm.tienda.ui.features.tienda.components.BarraNavegacion
-import com.pmdm.tienda.ui.features.tienda.components.Escaparate
-import com.pmdm.tienda.ui.features.tienda.components.BarraSuperiorBuena
-import com.pmdm.tienda.ui.features.tienda.components.Carrito
+import com.pmdm.tienda.ui.features.tienda.RuletaScreen
+import com.trendCoins.ui.features.tienda.components.BarraNavegacion
+import com.trendCoins.ui.features.tienda.components.Escaparate
+import com.trendCoins.ui.features.tienda.components.BarraSuperior
+import com.trendCoins.ui.features.tienda.components.Carrito
 import com.trendCoins.R
 import com.trendCoins.models.ArticuloCarrito
 import com.trendCoins.models.Cliente
@@ -46,12 +47,8 @@ fun TiendaScreen(
     articulos: List<ArticuloUiState>,
     articuloSeleccionado: ArticuloUiState?,
     filtro: String,
-    muestraFavoritos: Boolean,
     estaFiltrando: Boolean,
-    carrito: Boolean,
-    numerArticulos: Int,
     totalCompra: Int,
-    tallaUiState: TallaUiState,
     onTiendaEvent: (TiendaEvent) -> Unit,
     onNavigateToNewUser: (String) -> Unit,
     onNavigateToLogin: () -> Unit,
@@ -72,7 +69,7 @@ fun TiendaScreen(
     val contexto = LocalContext.current
     Scaffold(
         topBar = {
-            BarraSuperiorBuena(
+            BarraSuperior(
                 clienteUiState = clienteUiState,
                 onClickUsuario = { opcion ->
                     if (opcion == 0) onNavigateToNewUser(clienteUiState.correo)
@@ -105,7 +102,6 @@ fun TiendaScreen(
                     Escaparate(
                         articulos = articulos,
                         articuloSeleccionado = articuloSeleccionado,
-                        tallaUiState = tallaUiState,
                         onTiendaEvent = onTiendaEvent,
                         filtro = filtro,
                         estaFiltrando = estaFiltrando,

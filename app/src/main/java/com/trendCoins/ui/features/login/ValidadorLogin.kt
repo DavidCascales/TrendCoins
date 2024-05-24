@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.features.login
+package com.trendCoins.ui.features.login
 
 import com.pmdm.tienda.utilities.validacion.Validador
 import com.pmdm.tienda.utilities.validacion.ValidadorCompuesto

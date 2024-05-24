@@ -1,7 +1,7 @@
 package com.trendCoins.data
 
-import com.pmdm.tienda.data.services.ApiServicesException
-import com.pmdm.tienda.data.services.cliente.ClienteServiceImplementation
+import com.trendCoins.data.services.ApiServicesException
+import com.trendCoins.data.services.cliente.ClienteServiceImplementation
 import com.trendCoins.models.Cliente
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,7 +34,7 @@ class ClienteRepository @Inject constructor(private val proveedorClientes: Clien
 
             cliente=cliente.copy(deseados=deseados.toMutableList().aString())
             proveedorClientes.update(cliente)
-            }catch(e:ApiServicesException){}
+            }catch(e: ApiServicesException){}
         }
 
 }

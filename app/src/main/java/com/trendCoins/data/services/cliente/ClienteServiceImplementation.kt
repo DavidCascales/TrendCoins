@@ -1,7 +1,7 @@
-package com.pmdm.tienda.data.services.cliente
+package com.trendCoins.data.services.cliente
 
 import android.util.Log
-import com.pmdm.tienda.data.services.ApiServicesException
+import com.trendCoins.data.services.ApiServicesException
 
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class ClienteServiceImplementation @Inject constructor(
         }
     }
 
-    suspend fun insert(cliente:ClienteApi) {
+    suspend fun insert(cliente: ClienteApi) {
         val mensajeError ="No se ha podido añadir el cliente"
         try {
             val response = clienteService.insert(cliente)
