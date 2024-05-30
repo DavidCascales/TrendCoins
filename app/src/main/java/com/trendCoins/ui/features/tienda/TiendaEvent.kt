@@ -22,4 +22,6 @@ sealed interface TiendaEvent {
     object OnClickQuitarFiltro : TiendaEvent
 
     object OnClickSalir : TiendaEvent
+
+    object OnSesioniIciada : TiendaEvent
 }

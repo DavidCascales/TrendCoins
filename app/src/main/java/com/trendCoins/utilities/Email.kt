@@ -92,7 +92,7 @@ object Email {
     }
     private fun getBodyForCompraDetails(cliente:Cliente, listaArticulosCarrito: SnapshotStateList<ArticuloCarrito>?, totalCompra:Int) : String {
         val articulos = listaArticulosCarrito!!.joinToString(separator = "") {
-            "<li><strong>Artículo:</strong> ${it.descripcion}, <strong>Precio:</strong> ${it.precio}</li>"
+            "<li><strong>Artículo:</strong> ${it.descripcion}, <strong>Precio:</strong> ${it.precio}, <strong>Cantidad:</strong> ${it.cantidad}</li>"
         }
         return """
             

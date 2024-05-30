@@ -112,11 +112,14 @@ class TiendaViewModel @Inject constructor(
     }
 
 
-
     fun onTiendaEvent(tiendaEvent: TiendaEvent) {
         when (tiendaEvent) {
 
-            is TiendaEvent.OnCompraRealizada-> {
+            is TiendaEvent.OnSesioniIciada -> {
+                sesionIniciada!=sesionIniciada
+            }
+
+            is TiendaEvent.OnCompraRealizada -> {
                 viewModelScope.launch {
                     clienteState = clienteState.copy(puntos = clienteState.puntos - totalCompra)
 
@@ -124,7 +127,11 @@ class TiendaViewModel @Inject constructor(
                     mail.sendEmailCompraDetails(clienteState, listaArticuloCarrito, totalCompra)
                     val articulos = listaArticuloCarrito
                     articulos?.forEach {
-                        articuloCarritoRepository.deleteArticulo(clienteState.correo, it.descripcion, it.talla)
+                        articuloCarritoRepository.deleteArticulo(
+                            clienteState.correo,
+                            it.descripcion,
+                            it.talla
+                        )
                     }
                     listaArticuloCarrito = mutableListOf<ArticuloCarrito>().toMutableStateList()
                     mostrarCarrito = false
@@ -132,6 +139,7 @@ class TiendaViewModel @Inject constructor(
 
                 }
             }
+
             is TiendaEvent.OnTallaChange -> {
                 talla = tiendaEvent.talla
             }
@@ -180,7 +188,7 @@ class TiendaViewModel @Inject constructor(
                                 val posicion = buscaPosicionArticuloArticulo(articuloAux)
                                 listaArticuloCarrito!![posicion!!] =
                                     listaArticuloCarrito!![posicion].copy(
-                                        cantidad =  listaArticuloCarrito!![posicion]?.cantidad!! +1
+                                        cantidad = listaArticuloCarrito!![posicion]?.cantidad!! + 1
                                     )
                                 updateCarritoArticulo(posicion!!)
                             } else {
@@ -260,8 +268,7 @@ class TiendaViewModel @Inject constructor(
                         updateCarritoArticulo(posicion!!)
                     } else {
                         listaArticuloCarrito!!.removeAt(posicion)
-                        if (listaArticuloCarrito!!.isEmpty())
-                        {
+                        if (listaArticuloCarrito!!.isEmpty()) {
                             mostrarCarrito = false
                         }
                         deleteArticuloCarrito(tiendaEvent.articulo)
@@ -270,7 +277,6 @@ class TiendaViewModel @Inject constructor(
 
                 }
             }
-
 
 
             is TiendaEvent.OnClickSalir -> {
@@ -283,13 +289,13 @@ class TiendaViewModel @Inject constructor(
             }
 
 
-
         }
     }
 
     suspend fun updateCliente() {
         clienteRepository.update(clienteState)
     }
+
 
     suspend private fun getArticulos() =
         articuloRepository.get().toMutableList().toArticulosUiState().checkFavoritos()
@@ -312,8 +318,6 @@ class TiendaViewModel @Inject constructor(
         articulosFavoritosState = getArticulosFavoritos().toMutableStateList()
 
     }
-
-
 
 
     private fun buscaArticuloEnCarrito(articulo: ArticuloCarrito): ArticuloCarrito? {
@@ -339,7 +343,11 @@ class TiendaViewModel @Inject constructor(
     }
 
     suspend fun deleteArticuloCarrito(articulo: ArticuloCarrito) {
-        articuloCarritoRepository.deleteArticulo(clienteState.correo, articulo.descripcion, articulo.talla)
+        articuloCarritoRepository.deleteArticulo(
+            clienteState.correo,
+            articulo.descripcion,
+            articulo.talla
+        )
     }
 
     suspend private fun getCliente(login: String) = clienteRepository.getClienteCorreo(login)
@@ -399,7 +407,7 @@ class TiendaViewModel @Inject constructor(
                 articuloCarritoRepository.get(c.correo)?.toMutableStateList()
 
             if (listaArticuloCarrito!!.isNotEmpty()) {
-                mostrarCarrito=true;
+                mostrarCarrito = true;
                 actualizarCifrasPedido()
             }
         }
@@ -414,6 +422,7 @@ class TiendaViewModel @Inject constructor(
             articuloSeleccionadoState = null
             mostrarFavoritoState = false
             articulosState = getArticulos()
+            sesionIniciada=false
         }
     }
 

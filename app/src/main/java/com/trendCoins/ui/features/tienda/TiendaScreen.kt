@@ -72,7 +72,11 @@ fun TiendaScreen(
             BarraSuperior(
                 clienteUiState = clienteUiState,
                 onClickUsuario = { opcion ->
-                    if (opcion == 0) onNavigateToNewUser(clienteUiState.correo)
+                    if (opcion == 0)  {
+                        onNavigateToNewUser(clienteUiState.correo)
+                        onTiendaEvent(TiendaEvent.OnClickSalir)
+                    }
+
                     else {
                         onNavigateToLogin()
                         onTiendaEvent(TiendaEvent.OnClickSalir)
