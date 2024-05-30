@@ -423,6 +423,7 @@ class TiendaViewModel @Inject constructor(
             mostrarFavoritoState = false
             articulosState = getArticulos()
             sesionIniciada=false
+
         }
     }
 
